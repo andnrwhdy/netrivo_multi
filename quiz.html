@@ -1,0 +1,79 @@
+<!doctype html>
+<html lang="id">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Evaluasi Akhir - Netrivo</title>
+    <link rel="stylesheet" href="css/style.css" />
+  </head>
+  <body class="netrivo-evaluation">
+    <header class="evaluation-header">
+      <div class="evaluation-nav-cluster">
+        <div class="evaluation-brand"><img src="assets/images/DESAIN GRAFIS logo 1.png" alt="Netrivo" /></div>
+      </div>
+      <nav class="evaluation-header-actions" aria-label="Navigasi materi">
+        <a class="evaluation-review-button" href="materi.html" data-review-material><span class="review-label-full">Baca Ulang Materi</span><span class="review-label-short">Baca Materi</span></a>
+        <div class="evaluation-timer" data-evaluation-timer hidden aria-live="polite">
+          <span>Sisa waktu</span>
+          <strong data-evaluation-time>15:00</strong>
+        </div>
+      </nav>
+    </header>
+    <div class="evaluation-dashboard-row">
+      <a class="evaluation-dashboard-button" href="index.html"><span aria-hidden="true">&larr;</span> Kembali ke dashboard</a>
+    </div>
+
+    <main class="evaluation-shell">
+      <section class="evaluation-lock" data-quiz-lock hidden>
+        <span>Evaluasi terkunci</span>
+        <h1>Selesaikan semua materi dan latihan mandiri.</h1>
+        <p>Evaluasi akhir hanya dapat dimulai setelah seluruh submateri, video, dan latihan pada Pengantar Jaringan, Cisco, serta MikroTik selesai.</p>
+        <div class="evaluation-requirements" data-requirements></div>
+        <a class="button button-dark" href="materi.html" data-resume-learning>Lanjutkan belajar</a>
+      </section>
+
+      <section class="evaluation-start" data-evaluation-start hidden>
+        <span class="evaluation-start-kicker">Evaluasi Akhir Netrivo</span>
+        <h1>Siap memulai evaluasi?</h1>
+        <p>Pastikan kamu sudah siap sebelum waktu dimulai. Penghitung waktu tidak berhenti ketika halaman dimuat ulang.</p>
+        <div class="evaluation-start-summary">
+          <div><span>Jumlah soal</span><strong>15 soal</strong></div>
+          <div><span>Durasi</span><strong>15 menit</strong></div>
+          <div><span>Nilai minimum</span><strong>75</strong></div>
+        </div>
+        <div class="evaluation-start-note">
+          <strong>Petunjuk pengerjaan</strong>
+          <p>Pilih satu jawaban pada setiap pertanyaan. Jawaban yang sudah dipilih tidak dapat diubah.</p>
+        </div>
+        <button class="button button-dark evaluation-start-button" type="button" data-begin-evaluation>Mulai Evaluasi</button>
+      </section>
+
+      <section data-quiz-content hidden>
+        <div class="quiz-top">
+          <div class="quiz-heading-row"><p class="eyebrow">Evaluasi Seluruh Materi</p><span class="quiz-counter" data-counter>01 / 15</span></div>
+          <h1>Ukur pemahamanmu.</h1>
+        </div>
+        <div class="quiz-progress"><div data-progress></div></div>
+        <section class="quiz-card">
+          <div class="quiz-card-head"><span class="question-tag" data-question-number>Pertanyaan 01</span><span class="quiz-points">15 soal</span></div>
+          <h2 data-question>Memuat pertanyaan...</h2>
+          <div class="answer-list" data-answers></div>
+          <div class="quiz-actions"><span data-quiz-feedback>Pilih satu jawaban untuk setiap pertanyaan.</span><button class="button button-dark" type="button" data-next disabled>Pertanyaan berikutnya</button></div>
+        </section>
+      </section>
+    </main>
+
+    <dialog class="evaluation-stop-dialog" data-evaluation-stop-dialog aria-labelledby="evaluation-stop-title" aria-describedby="evaluation-stop-copy">
+      <div class="evaluation-stop-panel">
+        <h2 id="evaluation-stop-title">Hentikan evaluasi?</h2>
+        <p id="evaluation-stop-copy">Jawaban dan waktu yang sedang berjalan akan dihapus. Saat evaluasi dimulai kembali, pengerjaan akan dimulai dari awal.</p>
+        <div class="evaluation-stop-actions">
+          <button class="evaluation-stop-button evaluation-stop-cancel" type="button" data-cancel-stop-evaluation>Tidak</button>
+          <button class="evaluation-stop-button evaluation-stop-confirm" type="button" data-confirm-stop-evaluation>Ya</button>
+        </div>
+      </div>
+    </dialog>
+    <script src="js/session.js"></script>
+    <script src="js/quiz.js"></script>
+  </body>
+</html>

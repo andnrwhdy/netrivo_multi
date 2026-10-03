@@ -1,0 +1,522 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Netrivo Adventure - Netrivo Go</title>
+<style>
+@font-face{font-family:"Super Mario 256";src:url("assets/fonts/SuperMario256.ttf") format("truetype");font-style:normal;font-weight:400;font-display:swap;}
+:root{--blue:#1689e8;--sky:#65cfff;--navy:#12345a;--green:#38b94b;--grass:#73dc45;--yellow:#ffd84b;--red:#ef4c4c;--paper:#fffdf2;--body-font:"Segoe UI",Arial,sans-serif;}
+*{box-sizing:border-box;}
+[hidden]{display:none!important;}
+html,body{margin:0;overflow-x:hidden;background:#12345a;font-family:"Super Mario 256","Segoe UI",Arial,sans-serif;color:#102d50;font-weight:400;line-height:1.5;letter-spacing:0;}
+button,select,input{font:inherit;}
+button{cursor:pointer;}
+.game-shell{width:100%;padding:10px;border-radius:24px 10px 28px 14px;background:#12345a;}
+.game-topbar{min-height:48px;padding:0 14px;display:flex;align-items:center;justify-content:space-between;gap:12px;color:#8de8ff;background:#0d2c50;border-bottom:3px solid #ffd84b;border-radius:17px 7px 0 0;}
+.game-brand{display:flex;align-items:center;gap:9px;min-width:0;}
+.game-brand img{width:42px;height:38px;object-fit:contain;filter:drop-shadow(0 3px 4px rgba(0,0,0,.22));}
+.game-brand strong{display:block;color:var(--paper);font-size:15px;line-height:1.1;text-shadow:2px 2px 0 #082542;}
+.game-brand span{display:block;margin-top:2px;color:#b8efff;font:700 10px/1.2 var(--body-font);letter-spacing:.04em;}
+.top-actions{display:flex;align-items:center;gap:8px;}
+.icon-btn{width:34px;height:34px;display:grid;place-items:center;border:1px solid #4fc8ef;border-radius:12px 5px 12px 5px;background:#16436f;color:var(--yellow);font:700 16px/1 Arial,sans-serif;}
+.icon-btn:hover{background:#1e5b91;}
+.viewport{position:relative;overflow:hidden;width:100%;min-width:0;aspect-ratio:16/9;background:var(--sky);border:3px solid #0b2748;border-top:0;border-radius:0 0 20px 9px;box-shadow:0 7px 0 #0a2948;}
+canvas{display:block;width:100%;max-width:100%;min-width:0;height:100%;touch-action:none;image-rendering:pixelated;}
+.hud{position:absolute;z-index:4;left:10px;right:10px;top:9px;display:flex;justify-content:space-between;gap:6px;pointer-events:none;}
+.hud-group{min-width:0;display:flex;gap:6px;}
+.hud-item{min-width:76px;padding:6px 9px;border:2px solid #62d7f5;border-radius:11px 4px 11px 4px;color:var(--paper);background:rgba(16,61,105,.9);box-shadow:0 3px 0 rgba(7,37,68,.34);font:700 12px/1.25 var(--body-font);text-shadow:0 1px #11375e;}
+.hud-item b{color:var(--yellow);}
+.toast{position:absolute;z-index:5;left:50%;bottom:17px;max-width:80%;padding:8px 14px;border:2px solid #ffd84b;border-radius:5px;background:#123d69;color:var(--paper);font:700 12px/1.35 var(--body-font);transform:translate(-50%,16px);opacity:0;transition:.2s;pointer-events:none;text-align:center;}
+.toast.show{transform:translate(-50%,0);opacity:1;}
+.screen{position:absolute;z-index:8;inset:0;display:none;align-items:center;justify-content:center;padding:18px;background:linear-gradient(rgba(83,196,247,.88),rgba(47,153,224,.93));}
+.screen.active{display:flex;}
+.menu-scene{background:#4caed0 url("assets/images/bg/depan.jpg") center / cover no-repeat;}
+.menu-scene::before{content:"";position:absolute;inset:0;background:linear-gradient(180deg,rgba(11,42,61,.22),rgba(11,42,61,.04) 65%,rgba(11,42,61,.12));pointer-events:none;}
+.menu-panel{position:relative;z-index:2;width:min(520px,96%);margin-bottom:6%;text-align:center;}
+.menu-logo{width:62px;height:54px;object-fit:contain;filter:drop-shadow(2px 3px 0 #10283c);}
+.menu-panel h1{margin:0;color:var(--yellow);font-size:clamp(28px,5vw,54px);line-height:1.02;-webkit-text-stroke:2px var(--navy);text-shadow:3px 3px 0 #121c30,5px 5px 0 #121c30;}
+.menu-panel .tagline{margin:8px auto 20px;width:max-content;max-width:100%;color:var(--paper);font:700 clamp(11px,1.5vw,14px)/1.4 var(--body-font);text-shadow:1px 2px 0 #15394e;}
+.menu-buttons{width:min(340px,100%);margin:auto;display:grid;gap:4px;}
+.menu-buttons .game-btn,.menu-buttons .game-btn.primary{position:relative;min-height:38px;margin:0!important;padding:2px 12px;border:0;border-radius:0;background:transparent;box-shadow:none;color:var(--paper);font-size:clamp(15px,2.6vw,24px);line-height:1.25;-webkit-text-stroke:1px var(--navy);text-shadow:2px 2px 0 #121c30,3px 3px 0 #121c30;}
+.menu-buttons .game-btn:hover,.menu-buttons .game-btn:focus-visible{color:#fff0a1;background:rgba(9,38,52,.38);filter:none;transform:none;outline:0;}
+.menu-buttons .game-btn:hover::before,.menu-buttons .game-btn:focus-visible::before{content:"\25b6";position:absolute;left:5px;top:50%;font-family:Arial,sans-serif;font-size:15px;transform:translateY(-50%);-webkit-text-stroke:1px #1d2637;}
+.game-btn{min-height:42px;padding:8px 14px;border:2px solid var(--yellow);border-radius:16px 6px 16px 6px;background:#167be4;color:var(--paper);box-shadow:0 4px 0 #0c4d9d;text-shadow:0 2px 0 #0a4c91;font-family:"Super Mario 256",var(--body-font);font-weight:700;transition:transform .15s ease,filter .15s ease;}
+.game-btn:hover{filter:brightness(1.08);transform:translateY(-1px);}
+.game-btn.primary{border-color:#b9f16c;background:#21b957;color:var(--paper);box-shadow:0 4px 0 #087b38;text-shadow:0 2px 0 #087b38;}
+.game-btn.danger{border-color:#ffc24d;background:#e94d4d;color:var(--paper);box-shadow:0 4px 0 #9d2525;text-shadow:0 2px 0 #9d2525;}
+.dialog{position:relative;width:min(560px,94%);max-height:92%;overflow:auto;padding:22px;border:3px solid #144b80;border-radius:24px 9px 24px 9px;background:var(--paper);color:var(--navy);font-family:var(--body-font);box-shadow:8px 8px 0 rgba(12,70,118,.24);}
+.dialog h2{margin:0 0 14px;color:var(--navy);font-family:"Super Mario 256",var(--body-font);font-size:24px;}
+.dialog p{font-size:13px;line-height:1.5;}
+.instructions{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin:12px 0 18px;}
+.instruction{padding:12px;border:1px solid #b9d8eb;border-radius:14px 5px 14px 5px;background:#edf8ff;font-size:11px;line-height:1.4;}
+.instruction strong{display:block;margin-bottom:5px;color:#164f86;font-size:13px;}
+.settings-grid{display:grid;gap:14px;margin:14px 0 20px;}
+.setting-row{display:flex;align-items:center;justify-content:space-between;gap:15px;padding-bottom:12px;border-bottom:1px solid #d7e7ef;font-size:13px;}
+.setting-row select{padding:7px;border:1px solid #9bbfd4;border-radius:4px;background:#fff;}
+.result-panel{padding:clamp(10px,2vw,18px);max-height:none;overflow:visible;text-align:center;}
+.result-panel h2{margin:4px 0;font-size:clamp(20px,3vw,34px);line-height:1.2;}
+.result-panel p{margin:6px 0;font-size:clamp(10px,1.3vw,13px);line-height:1.4;}
+.result-icon{width:clamp(42px,6vw,64px);height:clamp(42px,6vw,64px);margin:0 auto 6px;display:grid;place-items:center;border:4px solid #ffd84b;border-radius:50%;background:#20b85a;color:#fff3a0;font-size:clamp(24px,4vw,36px);font-weight:900;box-shadow:0 5px 0 #087b38;}
+.result-panel.game-over .result-icon{background:#e94d4d;box-shadow:0 5px 0 #9d2525;}
+.result-stats{margin:7px auto;padding:7px;border:2px dashed #9bbfd4;border-radius:5px;background:#edf8ff;color:var(--navy);font-size:clamp(10px,1.3vw,13px);font-weight:700;}
+.result-actions{display:flex;justify-content:center;gap:9px;flex-wrap:wrap;}
+.result-actions .game-btn{min-height:36px;padding:5px 10px;font-size:clamp(10px,1.2vw,13px);}
+.touch-controls{display:none;width:100%;padding:12px 8px 8px;justify-content:space-between;align-items:center;background:#12345a;border-radius:0 0 20px 9px;}
+.touch-side{display:flex;gap:8px;}
+.touch-btn{width:48px;height:42px;border:2px solid #8ddfff;border-radius:15px 6px 15px 6px;background:#195788;color:#ffd84b;font-size:20px;font-weight:900;touch-action:none;user-select:none;box-shadow:0 3px 0 #082e52;}
+.touch-btn.jump{width:76px;border-radius:8px 18px 8px 18px;background:#e69b20;border-color:#ffe084;font-size:12px;box-shadow:0 3px 0 #9c6110;}
+@media (max-width:620px){
+  .game-shell{padding:6px;}
+  .game-topbar{padding:0 7px;}
+  .game-brand strong{font-size:12px;}
+  .game-brand img{width:34px;height:32px;}
+  .game-brand span{display:none;}
+  .top-actions{gap:5px;}
+  .icon-btn{width:30px;height:30px;}
+  .viewport{aspect-ratio:4/3;}
+  .menu-scene{background-position:center;}
+  .menu-panel{margin-bottom:12%;}
+  .menu-panel h1{-webkit-text-stroke:1.4px #252639;text-shadow:2px 2px 0 #121c30,3px 3px 0 #121c30;}
+  .menu-buttons{width:min(260px,100%);}
+  .menu-buttons .game-btn{min-height:32px;}
+  .hud{left:5px;right:5px;top:5px;display:grid;grid-template-columns:1fr 1fr;gap:5px;}
+  .hud-group{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:4px;}
+  .hud-group:last-child{text-align:right;}
+  .hud-item{min-width:0;padding:4px;font-size:8px;white-space:nowrap;overflow:hidden;}
+  .viewport{border-radius:0;box-shadow:none;}
+  .touch-controls{display:flex;}
+  .instructions{grid-template-columns:1fr;}
+  .dialog{padding:15px;}
+  .screen:has(> .result-panel){padding:8px;}
+  .result-panel{width:100%;padding:9px;}
+  .result-panel h2{font-size:clamp(16px,4.8vw,22px);}
+  .result-panel p{margin:4px 0;font-size:10px;line-height:1.3;}
+  .result-icon{width:38px;height:38px;margin-bottom:4px;border-width:3px;font-size:23px;}
+  .result-stats{margin:5px auto;padding:4px;font-size:9px;line-height:1.3;}
+  .result-actions{gap:5px;flex-wrap:nowrap;}
+  .result-actions .game-btn{min-width:0;flex:1;min-height:30px;padding:4px;font-size:10px;line-height:1.2;}
+}
+@media (max-width:420px){
+  .menu-logo{display:none;}
+  .menu-panel{margin-bottom:0;}
+  .menu-panel .tagline{margin:5px auto 9px;}
+  .menu-buttons{gap:0;}
+  .menu-buttons .game-btn,.menu-buttons .game-btn.primary{min-height:30px;}
+}
+</style>
+</head>
+<body>
+<div class="game-shell">
+  <header class="game-topbar">
+    <div class="game-brand">
+      <img src="assets/images/DESAIN GRAFIS logo 2.png" alt="Logo Netrivo Go">
+      <div><strong>Netrivo Adventure  </strong><span>NETRIVO GO PLATFORM LAB</span></div>
+    </div>
+    <div class="top-actions">
+      <button class="icon-btn" id="pauseButton" type="button" title="Jeda" aria-label="Jeda">&#10074;&#10074;</button>
+    </div>
+  </header>
+
+  <div class="viewport" id="viewport">
+    <canvas id="gameCanvas" width="960" height="540" aria-label="Game platformer Netrivo Adventure"></canvas>
+    <div class="hud" id="hud" hidden>
+      <div class="hud-group">
+        <div class="hud-item">NYAWA <b id="livesHud">3</b></div>
+        <div class="hud-item">PAKET <b id="packetHud">0/8</b></div>
+      </div>
+      <div class="hud-group">
+        <div class="hud-item">WAKTU <b id="timeHud">02:30</b></div>
+        <div class="hud-item">LEVEL <b id="levelHud">1-1</b></div>
+      </div>
+    </div>
+    <div class="toast" id="toast"></div>
+
+    <section class="screen menu-scene active" id="menuScreen">
+      <div class="menu-panel">
+        <img class="menu-logo" src="assets/images/DESAIN GRAFIS logo 2.png" alt="">
+        <h1>Netrivo<br>Adventure</h1>
+        <div class="tagline">Kumpulkan data, hubungkan dunia.</div>
+        <div class="menu-buttons">
+          <button class="game-btn primary" id="startButton" type="button">Mulai Game</button>
+          <button class="game-btn" data-open="helpScreen" type="button">Petunjuk</button>
+          <button class="game-btn" data-open="settingsScreen" type="button">Pengaturan</button>
+        </div>
+      </div>
+    </section>
+
+    <section class="screen" id="helpScreen">
+      <div class="dialog">
+        <h2>Petunjuk Game</h2>
+        <div class="instructions">
+          <div class="instruction"><strong>Bergerak</strong>Gunakan tombol A/D atau panah kiri/kanan.</div>
+          <div class="instruction"><strong>Melompat</strong>Tekan W, panah atas, atau Space untuk melompat.</div>
+          <div class="instruction"><strong>Tujuan</strong>Ambil semua paket, capai server, dan tuntaskan tiga level.</div>
+        </div>
+        <button class="game-btn" data-open="menuScreen" type="button">Kembali</button>
+      </div>
+    </section>
+
+    <section class="screen" id="settingsScreen">
+      <div class="dialog">
+        <h2>Pengaturan</h2>
+        <div class="settings-grid">
+          <label class="setting-row"><span>Efek suara</span><input id="soundSetting" type="checkbox" checked></label>
+          <label class="setting-row"><span>Tingkat kesulitan</span><select id="difficultySetting"><option value="normal">Normal</option><option value="easy">Mudah</option><option value="hard">Sulit</option></select></label>
+        </div>
+        <button class="game-btn" data-open="menuScreen" type="button">Simpan dan Kembali</button>
+      </div>
+    </section>
+
+    <section class="screen" id="pauseScreen">
+      <div class="dialog result-panel">
+        <h2>Game Dijeda</h2>
+        <p>Perjalanan paket data berhenti sementara.</p>
+        <div class="result-actions"><button class="game-btn primary" id="resumeButton" type="button">Lanjutkan</button><button class="game-btn" data-open="menuScreen" type="button">Menu Utama</button></div>
+      </div>
+    </section>
+
+    <section class="screen" id="completeScreen">
+      <div class="dialog result-panel">
+        <div class="result-icon">✓</div>
+        <h2 id="completeTitle">Level Selesai</h2>
+        <p>Semua paket data berhasil dikirim ke server tujuan.</p>
+        <div class="result-stats" id="completeStats"></div>
+        <div class="result-actions"><button class="game-btn primary" id="playAgainButton" type="button">Level Berikutnya</button><button class="game-btn" data-open="menuScreen" type="button">Menu Utama</button></div>
+      </div>
+    </section>
+
+    <section class="screen" id="gameOverScreen">
+      <div class="dialog result-panel game-over">
+        <div class="result-icon">!</div>
+        <h2>Game Over</h2>
+        <p>Koneksi terputus sebelum semua paket sampai ke server.</p>
+        <div class="result-stats" id="gameOverStats"></div>
+        <div class="result-actions"><button class="game-btn danger" id="retryButton" type="button">Ulangi Level</button><button class="game-btn" data-open="menuScreen" type="button">Menu Utama</button></div>
+      </div>
+    </section>
+  </div>
+
+  <div class="touch-controls" aria-label="Kontrol sentuh">
+    <div class="touch-side"><button class="touch-btn" data-control="left" type="button" aria-label="Bergerak ke kiri">‹</button><button class="touch-btn" data-control="right" type="button" aria-label="Bergerak ke kanan">›</button></div>
+    <button class="touch-btn jump" data-control="jump" type="button">LOMPAT</button>
+  </div>
+</div>
+
+<script>
+const canvas=document.getElementById('gameCanvas');
+const ctx=canvas.getContext('2d');
+const mountainBackground=new Image();
+mountainBackground.src='assets/images/bg/MOUNTAIN.jpg';
+const mascotImage=new Image();
+mascotImage.src='assets/images/icon/maskot.png';
+const LEVELS=[
+  {
+    name:'Koneksi Awal',width:3000,time:150,sky:['#58c8ff','#c7f2ff'],checkpoints:[780,1450,2190],
+    platforms:[
+      {x:0,y:460,w:650,h:80},{x:760,y:460,w:540,h:80},{x:1420,y:460,w:630,h:80},{x:2160,y:460,w:840,h:80},
+      {x:240,y:385,w:170,h:24},{x:500,y:330,w:150,h:24},{x:820,y:385,w:170,h:24},{x:1050,y:315,w:170,h:24},
+      {x:1450,y:385,w:170,h:24},{x:1750,y:295,w:170,h:24},{x:2200,y:385,w:170,h:24},{x:2520,y:320,w:170,h:24}
+    ],
+    packets:[{x:300,y:370},{x:560,y:285},{x:850,y:365},{x:1110,y:270},{x:1500,y:350},{x:1820,y:245},{x:2240,y:350},{x:2600,y:270}],
+    hazards:[{type:'firewall',x:430,y:416,w:42,h:44},{type:'spikes',x:920,y:440,w:90,h:20},{type:'firewall',x:1570,y:416,w:42,h:44},{type:'spikes',x:1870,y:440,w:100,h:20},{type:'firewall',x:2380,y:416,w:42,h:44},{type:'spikes',x:2690,y:440,w:90,h:20}],
+    server:{x:2880,y:350,w:70,h:110}
+  },
+  {
+    name:'Jalur Padat',width:3400,time:130,sky:['#4bb9f2','#d9f5ff'],checkpoints:[680,1320,1980,2760],
+    platforms:[
+      {x:0,y:460,w:540,h:80},{x:650,y:460,w:500,h:80},{x:1290,y:460,w:510,h:80},{x:1940,y:460,w:660,h:80},{x:2740,y:460,w:660,h:80},
+      {x:200,y:370,w:140,h:22},{x:420,y:295,w:135,h:22},{x:700,y:365,w:145,h:22},{x:980,y:280,w:130,h:22},{x:1340,y:350,w:140,h:22},
+      {x:1630,y:270,w:130,h:22},{x:2050,y:355,w:145,h:22},{x:2340,y:285,w:135,h:22},{x:2810,y:350,w:140,h:22},{x:3090,y:270,w:140,h:22}
+    ],
+    packets:[{x:250,y:335},{x:470,y:250},{x:735,y:330},{x:1020,y:235},{x:1380,y:305},{x:1670,y:225},{x:2100,y:310},{x:2380,y:240},{x:2845,y:305},{x:3130,y:225}],
+    hazards:[{type:'spikes',x:350,y:440,w:72,h:20},{type:'firewall',x:860,y:416,w:42,h:44},{type:'malware',x:1360,y:410,w:38,h:38,minX:1320,maxX:1700,speed:90},{type:'spikes',x:2230,y:440,w:105,h:20},{type:'firewall',x:2470,y:416,w:42,h:44},{type:'malware',x:2820,y:410,w:38,h:38,minX:2780,maxX:3240,speed:110}],
+    server:{x:3290,y:350,w:70,h:110}
+  },
+  {
+    name:'Pusat Data',width:3900,time:110,sky:['#319ad8','#c9efff'],checkpoints:[620,1260,1920,2580,3240],
+    platforms:[
+      {x:0,y:460,w:500,h:80},{x:610,y:460,w:460,h:80},{x:1200,y:460,w:500,h:80},{x:1840,y:460,w:470,h:80},{x:2450,y:460,w:500,h:80},{x:3090,y:460,w:810,h:80},
+      {x:170,y:365,w:120,h:20},{x:370,y:285,w:115,h:20},{x:680,y:350,w:120,h:20},{x:920,y:260,w:110,h:20},{x:1270,y:350,w:120,h:20},
+      {x:1510,y:270,w:110,h:20},{x:1910,y:350,w:120,h:20},{x:2150,y:255,w:110,h:20},{x:2520,y:350,w:120,h:20},{x:2770,y:265,w:110,h:20},
+      {x:3160,y:345,w:120,h:20},{x:3420,y:255,w:110,h:20},{x:3650,y:340,w:120,h:20}
+    ],
+    packets:[{x:210,y:330},{x:405,y:240},{x:720,y:305},{x:950,y:215},{x:1310,y:305},{x:1545,y:225},{x:1950,y:305},{x:2185,y:210},{x:2560,y:305},{x:2805,y:220},{x:3200,y:300},{x:3455,y:210}],
+    hazards:[{type:'firewall',x:305,y:416,w:42,h:44},{type:'spikes',x:790,y:440,w:85,h:20},{type:'malware',x:1240,y:410,w:38,h:38,minX:1220,maxX:1650,speed:125},{type:'spikes',x:2010,y:440,w:95,h:20},{type:'malware',x:2480,y:410,w:38,h:38,minX:2470,maxX:2890,speed:145},{type:'firewall',x:3320,y:416,w:42,h:44},{type:'spikes',x:3540,y:440,w:90,h:20}],
+    server:{x:3790,y:350,w:70,h:110}
+  }
+];
+const keys={left:false,right:false,jump:false};
+const player={x:75,y:390,w:34,h:48,vx:0,vy:0,onGround:false,facing:1,invulnerable:0};
+let state='menu',lives=3,collected=0,timeLeft=150,cameraX=0,lastTime=0,checkpoint=75,levelIndex=0,level=null;
+let soundOn=true,difficulty='normal',toastTimer=null,audioContext=null;
+
+const livesHud=document.getElementById('livesHud');
+const packetHud=document.getElementById('packetHud');
+const timeHud=document.getElementById('timeHud');
+const hud=document.getElementById('hud');
+const toast=document.getElementById('toast');
+
+function openScreen(id){
+  document.querySelectorAll('.screen').forEach(screen=>screen.classList.toggle('active',screen.id===id));
+  document.querySelector('.top-actions').hidden=id==='menuScreen'||state!=='playing';
+  if(id==='menuScreen'){state='menu';hud.hidden=true;resetKeys();}
+  reportHeight();
+}
+
+function startGame(){
+  difficulty=document.getElementById('difficultySetting').value;
+  soundOn=document.getElementById('soundSetting').checked;
+  lives=difficulty==='easy'?5:difficulty==='hard'?2:3;
+  levelIndex=0;
+  startLevel(levelIndex);
+}
+
+function startLevel(index){
+  levelIndex=index;
+  const source=LEVELS[levelIndex];
+  level={
+    ...source,
+    platforms:source.platforms.map(item=>({...item})),
+    packets:source.packets.map(item=>({...item,taken:false})),
+    hazards:source.hazards.map(item=>({...item,direction:1})),
+    server:{...source.server}
+  };
+  const timeFactor=difficulty==='easy'?1.2:difficulty==='hard'?.85:1;
+  timeLeft=Math.round(level.time*timeFactor);
+  collected=0;checkpoint=75;cameraX=0;
+  resetPlayer();
+  document.querySelectorAll('.screen').forEach(screen=>screen.classList.remove('active'));
+  document.querySelector('.top-actions').hidden=false;
+  hud.hidden=false;state='playing';lastTime=performance.now();updateHud();beep(520,.08);
+  showToast('Level '+(levelIndex+1)+': '+level.name);
+}
+
+function resetPlayer(){
+  player.x=checkpoint;player.y=360;player.vx=0;player.vy=0;player.invulnerable=1.2;
+}
+
+function resetKeys(){keys.left=false;keys.right=false;keys.jump=false;}
+
+function updateHud(){
+  livesHud.textContent=lives;
+  packetHud.textContent=collected+'/'+(level?.packets.length||LEVELS[0].packets.length);
+  document.getElementById('levelHud').textContent='1-'+(levelIndex+1);
+  const total=Math.max(0,Math.ceil(timeLeft));
+  timeHud.textContent=String(Math.floor(total/60)).padStart(2,'0')+':'+String(total%60).padStart(2,'0');
+}
+
+function showToast(message){
+  toast.textContent=message;toast.classList.add('show');clearTimeout(toastTimer);
+  toastTimer=setTimeout(()=>toast.classList.remove('show'),1800);
+}
+
+function beep(frequency,duration){
+  if(!soundOn)return;
+  audioContext=audioContext||new(window.AudioContext||window.webkitAudioContext)();
+  const oscillator=audioContext.createOscillator();const gain=audioContext.createGain();
+  oscillator.frequency.value=frequency;oscillator.type='square';gain.gain.value=.035;
+  oscillator.connect(gain);gain.connect(audioContext.destination);oscillator.start();
+  gain.gain.exponentialRampToValueAtTime(.001,audioContext.currentTime+duration);
+  oscillator.stop(audioContext.currentTime+duration);
+}
+
+function intersects(a,b){return a.x<b.x+b.w&&a.x+a.w>b.x&&a.y<b.y+b.h&&a.y+a.h>b.y;}
+
+function loseLife(){
+  if(player.invulnerable>0||state!=='playing')return;
+  lives--;beep(130,.2);updateHud();
+  if(lives<=0){endGame(false);return;}
+  showToast('Koneksi terputus. Kembali ke checkpoint.');resetPlayer();
+}
+
+function endGame(won){
+  state=won?'complete':'gameover';resetKeys();hud.hidden=true;
+  if(won){
+    const finalLevel=levelIndex===LEVELS.length-1;
+    document.getElementById('completeTitle').textContent=finalLevel?'Petualangan Selesai':'Level '+(levelIndex+1)+' Selesai';
+    document.getElementById('playAgainButton').textContent=finalLevel?'Main Lagi':'Level Berikutnya';
+    beep(760,.16);document.getElementById('completeStats').textContent=level.name+' • Paket '+collected+'/'+level.packets.length+' • Sisa waktu '+Math.ceil(timeLeft)+' detik';openScreen('completeScreen');
+  }else{
+    document.getElementById('gameOverStats').textContent='Level '+(levelIndex+1)+' • Paket terkumpul '+collected+'/'+level.packets.length;openScreen('gameOverScreen');
+  }
+}
+
+function update(dt){
+  if(state!=='playing')return;
+  timeLeft-=dt;if(timeLeft<=0){timeLeft=0;updateHud();endGame(false);return;}
+  player.invulnerable=Math.max(0,player.invulnerable-dt);
+  const speed=(difficulty==='hard'?300:270)+(levelIndex*8);
+  player.vx=(keys.left?-speed:0)+(keys.right?speed:0);
+  if(player.vx)player.facing=Math.sign(player.vx);
+  if(keys.jump&&player.onGround){player.vy=-670;player.onGround=false;keys.jump=false;beep(310,.05);}
+  const previousBottom=player.y+player.h;
+  player.x=Math.max(0,Math.min(level.width-player.w,player.x+player.vx*dt));
+  player.vy+=1750*dt;player.y+=player.vy*dt;player.onGround=false;
+  for(const platform of level.platforms){
+    if(player.x+player.w>platform.x&&player.x<platform.x+platform.w&&previousBottom<=platform.y+5&&player.y+player.h>=platform.y&&player.vy>=0){
+      player.y=platform.y-player.h;player.vy=0;player.onGround=true;
+    }
+  }
+  level.checkpoints.forEach(point=>{if(player.x>point-40)checkpoint=point;});
+  if(player.y>610){player.invulnerable=0;loseLife();return;}
+  level.hazards.forEach(hazard=>{
+    if(hazard.type==='malware'){
+      hazard.x+=hazard.speed*hazard.direction*dt;
+      if(hazard.x<=hazard.minX||hazard.x>=hazard.maxX){hazard.direction*=-1;hazard.x=Math.max(hazard.minX,Math.min(hazard.maxX,hazard.x));}
+    }
+  });
+  for(const hazard of level.hazards){if(intersects(player,hazard)){loseLife();break;}}
+  level.packets.forEach(packet=>{
+    if(!packet.taken&&intersects(player,{x:packet.x-13,y:packet.y-18,w:26,h:34})){
+      packet.taken=true;collected++;beep(680,.07);updateHud();showToast('Paket data diamankan: '+collected+'/'+level.packets.length);
+    }
+  });
+  if(intersects(player,level.server)){
+    if(collected===level.packets.length)endGame(true);
+    else showToast('Server menunggu '+(level.packets.length-collected)+' paket data lagi.');
+  }
+  const target=Math.max(0,Math.min(level.width-canvas.width,player.x-canvas.width*.38));
+  cameraX+=(target-cameraX)*Math.min(1,dt*5);
+  updateHud();
+}
+
+function roundedRect(x,y,w,h,r){
+  ctx.beginPath();ctx.moveTo(x+r,y);ctx.lineTo(x+w-r,y);ctx.quadraticCurveTo(x+w,y,x+w,y+r);ctx.lineTo(x+w,y+h-r);ctx.quadraticCurveTo(x+w,y+h,x+w-r,y+h);ctx.lineTo(x+r,y+h);ctx.quadraticCurveTo(x,y+h,x,y+h-r);ctx.lineTo(x,y+r);ctx.quadraticCurveTo(x,y,x+r,y);ctx.closePath();
+}
+
+function drawCloud(x,y,scale){
+  ctx.fillStyle='rgba(255,255,255,.9)';ctx.beginPath();ctx.arc(x,y,20*scale,0,Math.PI*2);ctx.arc(x+24*scale,y-12*scale,27*scale,0,Math.PI*2);ctx.arc(x+52*scale,y,21*scale,0,Math.PI*2);ctx.fill();ctx.fillRect(x-4*scale,y,62*scale,18*scale);
+}
+
+function drawBackground(){
+  if(mountainBackground.complete&&mountainBackground.naturalWidth){
+    ctx.imageSmoothingEnabled=false;
+    ctx.drawImage(mountainBackground,0,0,canvas.width,canvas.height);
+    return;
+  }
+  const colors=level?.sky||LEVELS[0].sky;
+  const sky=ctx.createLinearGradient(0,0,0,460);sky.addColorStop(0,colors[0]);sky.addColorStop(1,colors[1]);ctx.fillStyle=sky;ctx.fillRect(0,0,canvas.width,canvas.height);
+  ctx.fillStyle='rgba(57,161,205,.22)';
+  for(let i=0;i<16;i++){const x=i*95-(cameraX*.18%95);const h=70+(i%4)*28;ctx.fillRect(x,460-h,64,h);ctx.fillRect(x+16,460-h-20,32,20);}
+  drawCloud(80-(cameraX*.08%1100),95,1);drawCloud(480-(cameraX*.05%1200),145,.75);drawCloud(820-(cameraX*.1%1300),75,.9);
+  ctx.strokeStyle='rgba(20,112,160,.22)';ctx.lineWidth=2;
+  for(let x=-cameraX*.25%180-100;x<canvas.width+100;x+=180){ctx.beginPath();ctx.moveTo(x,380);ctx.lineTo(x+80,315);ctx.lineTo(x+165,380);ctx.stroke();}
+}
+
+function drawPlatform(platform){
+  const x=platform.x-cameraX;if(x+platform.w<0||x>canvas.width)return;
+  ctx.fillStyle='#6b3f24';ctx.fillRect(x,platform.y,platform.w,platform.h);
+  ctx.fillStyle='#3ebd43';ctx.fillRect(x,platform.y,platform.w,9);
+  ctx.fillStyle='#87df4f';ctx.fillRect(x,platform.y,platform.w,4);
+  ctx.strokeStyle='rgba(50,25,15,.2)';ctx.lineWidth=2;
+  for(let bx=x+18;bx<x+platform.w;bx+=38){ctx.beginPath();ctx.moveTo(bx,platform.y+12);ctx.lineTo(bx-12,platform.y+34);ctx.stroke();}
+}
+
+function drawPacket(packet){
+  if(packet.taken)return;const x=packet.x-cameraX,y=packet.y;
+  ctx.save();ctx.translate(x,y+Math.sin(performance.now()/240+packet.x)*5);
+  ctx.fillStyle='#fff';ctx.strokeStyle='#1188e8';ctx.lineWidth=3;roundedRect(-12,-16,24,30,3);ctx.fill();ctx.stroke();
+  ctx.fillStyle='#41a9f1';ctx.fillRect(-6,-8,12,3);ctx.fillRect(-6,-1,12,3);ctx.fillRect(-6,6,8,3);
+  ctx.restore();
+}
+
+function drawFirewall(hazard){
+  const x=hazard.x-cameraX,y=hazard.y;
+  if(hazard.type==='spikes'){
+    ctx.fillStyle='#ed3f4f';ctx.strokeStyle='#8b2030';ctx.lineWidth=2;
+    for(let i=0;i<hazard.w;i+=18){ctx.beginPath();ctx.moveTo(x+i,y+hazard.h);ctx.lineTo(x+i+9,y);ctx.lineTo(x+i+18,y+hazard.h);ctx.closePath();ctx.fill();ctx.stroke();}
+    return;
+  }
+  if(hazard.type==='malware'){
+    ctx.fillStyle='#f47b20';ctx.strokeStyle='#8b321d';ctx.lineWidth=3;roundedRect(x,y,hazard.w,hazard.h,8);ctx.fill();ctx.stroke();
+    ctx.fillStyle='#fff';ctx.beginPath();ctx.arc(x+11,y+14,5,0,Math.PI*2);ctx.arc(x+27,y+14,5,0,Math.PI*2);ctx.fill();
+    ctx.fillStyle='#17304f';ctx.beginPath();ctx.arc(x+12,y+15,2,0,Math.PI*2);ctx.arc(x+26,y+15,2,0,Math.PI*2);ctx.fill();
+    ctx.strokeStyle='#fff';ctx.lineWidth=2;ctx.beginPath();ctx.moveTo(x+10,y+28);ctx.lineTo(x+28,y+28);ctx.stroke();
+    return;
+  }
+  ctx.fillStyle='#df443f';ctx.strokeStyle='#8c2826';ctx.lineWidth=3;roundedRect(x,y,hazard.w,hazard.h,3);ctx.fill();ctx.stroke();
+  ctx.fillStyle='#ffca3a';ctx.beginPath();ctx.moveTo(x+21,y+7);ctx.lineTo(x+32,y+13);ctx.lineTo(x+29,y+31);ctx.lineTo(x+21,y+38);ctx.lineTo(x+13,y+31);ctx.lineTo(x+10,y+13);ctx.closePath();ctx.fill();
+  ctx.fillStyle='#ffd84b';ctx.font='18px "Super Mario 256", Arial';ctx.textAlign='center';ctx.fillText('!',x+21,y+29);
+}
+
+function drawServer(){
+  const server=level.server;
+  const x=server.x-cameraX,y=server.y;
+  ctx.fillStyle='#174a7e';ctx.strokeStyle='#0b2d50';ctx.lineWidth=4;roundedRect(x,y,server.w,server.h,5);ctx.fill();ctx.stroke();
+  for(let i=0;i<3;i++){ctx.fillStyle='#0d3158';ctx.fillRect(x+10,y+13+i*29,server.w-20,20);ctx.fillStyle='#52df8a';ctx.beginPath();ctx.arc(x+18,y+23+i*29,3,0,Math.PI*2);ctx.fill();ctx.fillStyle='#53caff';ctx.fillRect(x+28,y+20+i*29,25,5);}
+  ctx.strokeStyle='#1489df';ctx.lineWidth=4;ctx.beginPath();ctx.arc(x+server.w/2,y-10,14,Math.PI*1.2,Math.PI*1.8);ctx.stroke();ctx.beginPath();ctx.arc(x+server.w/2,y-10,25,Math.PI*1.2,Math.PI*1.8);ctx.stroke();
+  ctx.fillStyle='#ffd84b';ctx.font='12px "Super Mario 256", Arial';ctx.textAlign='center';ctx.fillText('SERVER',x+server.w/2,y-26);
+}
+
+function drawPlayer(){
+  if(player.invulnerable>0&&Math.floor(player.invulnerable*12)%2===0)return;
+  const x=player.x-cameraX,y=player.y;ctx.save();ctx.translate(x+player.w/2,y);ctx.scale(player.facing,1);
+  if(mascotImage.complete&&mascotImage.naturalWidth){
+    ctx.imageSmoothingEnabled=true;
+    ctx.drawImage(mascotImage,386,148,641,925,-21,-12,42,60);
+    ctx.restore();
+    return;
+  }
+  ctx.fillStyle='#29354a';ctx.beginPath();ctx.arc(0,10,13,Math.PI,Math.PI*2);ctx.lineTo(13,18);ctx.lineTo(-13,18);ctx.fill();
+  ctx.fillStyle='#f3b37d';ctx.beginPath();ctx.arc(0,15,10,0,Math.PI*2);ctx.fill();
+  ctx.fillStyle='#1689e8';roundedRect(-12,24,24,19,5);ctx.fill();
+  ctx.fillStyle='#fff';ctx.fillRect(-4,26,8,10);ctx.fillStyle='#3bc9db';ctx.fillRect(-2,28,4,6);
+  ctx.strokeStyle='#19345b';ctx.lineWidth=5;ctx.beginPath();ctx.moveTo(-6,42);ctx.lineTo(-9,48);ctx.moveTo(6,42);ctx.lineTo(9,48);ctx.stroke();
+  ctx.fillStyle='#17263b';ctx.fillRect(-14,47,12,4);ctx.fillRect(3,47,12,4);ctx.restore();
+}
+
+function draw(){
+  drawBackground();
+  if(level){level.platforms.forEach(drawPlatform);level.packets.forEach(drawPacket);level.hazards.forEach(drawFirewall);drawServer();drawPlayer();}
+  if(state==='menu'){ctx.fillStyle='rgba(255,255,255,.08)';ctx.fillRect(0,0,canvas.width,canvas.height);}
+}
+
+function frame(now){
+  const dt=Math.min(.033,(now-lastTime)/1000||0);lastTime=now;update(dt);draw();requestAnimationFrame(frame);
+}
+
+function setKey(code,pressed){
+  if(['ArrowLeft','KeyA'].includes(code))keys.left=pressed;
+  if(['ArrowRight','KeyD'].includes(code))keys.right=pressed;
+  if(['ArrowUp','KeyW','Space'].includes(code)){if(pressed&&!keys.jump)keys.jump=true;if(!pressed)keys.jump=false;}
+}
+
+window.addEventListener('keydown',event=>{
+  if(['ArrowLeft','ArrowRight','ArrowUp','Space'].includes(event.code))event.preventDefault();
+  if(event.code==='Escape'&&state==='playing')pauseGame();else setKey(event.code,true);
+});
+window.addEventListener('keyup',event=>setKey(event.code,false));
+
+document.querySelectorAll('[data-open]').forEach(button=>button.addEventListener('click',()=>openScreen(button.dataset.open)));
+document.getElementById('startButton').addEventListener('click',startGame);
+document.getElementById('retryButton').addEventListener('click',()=>{
+  lives=difficulty==='easy'?5:difficulty==='hard'?2:3;
+  startLevel(levelIndex);
+});
+document.getElementById('playAgainButton').addEventListener('click',()=>{
+  if(levelIndex<LEVELS.length-1){startLevel(levelIndex+1);}
+  else{startGame();}
+});
+document.getElementById('resumeButton').addEventListener('click',()=>{document.getElementById('pauseScreen').classList.remove('active');document.querySelector('.top-actions').hidden=false;state='playing';lastTime=performance.now();});
+
+function pauseGame(){if(state!=='playing')return;state='paused';resetKeys();openScreen('pauseScreen');}
+document.getElementById('pauseButton').addEventListener('click',pauseGame);
+
+document.querySelectorAll('[data-control]').forEach(button=>{
+  const control=button.dataset.control;
+  const press=event=>{event.preventDefault();keys[control]=true;};
+  const release=event=>{event.preventDefault();keys[control]=false;};
+  button.addEventListener('pointerdown',press);button.addEventListener('pointerup',release);button.addEventListener('pointercancel',release);button.addEventListener('pointerleave',release);
+});
+
+document.addEventListener('visibilitychange',()=>{if(document.hidden&&state==='playing')pauseGame();});
+
+function reportHeight(){requestAnimationFrame(()=>window.parent.postMessage({type:'petualangan-jaringan-height',height:Math.ceil(document.querySelector('.game-shell').getBoundingClientRect().height)},'*'));}
+if('ResizeObserver'in window)new ResizeObserver(reportHeight).observe(document.querySelector('.game-shell'));
+window.addEventListener('load',reportHeight);window.addEventListener('resize',reportHeight);
+
+openScreen('menuScreen');updateHud();requestAnimationFrame(frame);reportHeight();
+</script>
+</body>
+</html>

@@ -1,0 +1,73 @@
+<!doctype html>
+<html lang="id">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Hasil Evaluasi - Netrivo</title>
+    <link rel="stylesheet" href="css/style.css" />
+  </head>
+  <body class="netrivo-evaluation evaluation-result-page">
+    <header class="evaluation-header">
+      <div class="evaluation-nav-cluster">
+        <div class="evaluation-brand"><img src="assets/images/DESAIN GRAFIS logo 1.png" alt="Netrivo" /></div>
+      </div>
+      <nav class="evaluation-header-actions" aria-label="Navigasi hasil evaluasi">
+        <a class="evaluation-review-button" href="materi.html">Baca Materi</a>
+      </nav>
+    </header>
+    <div class="evaluation-dashboard-row">
+      <a class="evaluation-dashboard-button" href="index.html"><span aria-hidden="true">&larr;</span> Kembali ke dashboard</a>
+    </div>
+
+    <main class="evaluation-result-shell">
+      <section class="evaluation-result-card">
+        <span class="evaluation-result-status" data-result-icon>Memuat hasil</span>
+        <h1 data-result-title>Evaluasi selesai</h1>
+        <p class="evaluation-result-lead" data-result-message>Statistik pengerjaan sedang disiapkan.</p>
+
+        <div class="evaluation-result-overview">
+          <div class="evaluation-score-ring"><strong data-score>0</strong><span>dari 100</span></div>
+          <div class="evaluation-score-copy">
+            <span>Nilai akhir</span>
+            <h2 data-score-title>Hasil evaluasi</h2>
+            <p data-score-detail>Memuat jumlah jawaban benar.</p>
+          </div>
+        </div>
+
+        <section class="evaluation-statistics" aria-labelledby="statistics-title">
+          <div class="evaluation-section-heading">
+            <span>Statistik pencapaian</span>
+            <h2 id="statistics-title">Ringkasan pengerjaan</h2>
+          </div>
+          <div class="evaluation-stat-grid">
+            <div><span>Jawaban benar</span><strong data-stat-correct>0</strong></div>
+            <div><span>Jawaban salah</span><strong data-stat-incorrect>0</strong></div>
+            <div><span>Tidak dijawab</span><strong data-stat-unanswered>0</strong></div>
+            <div><span>Waktu pengerjaan</span><strong data-stat-duration>00:00</strong></div>
+          </div>
+          <div class="evaluation-achievement">
+            <div class="evaluation-achievement-copy"><span>Tingkat pencapaian</span><strong data-achievement-text>0% dari target minimum 75%</strong></div>
+            <div class="evaluation-achievement-track" aria-hidden="true"><div data-achievement-progress></div><i title="Nilai minimum 75%"></i></div>
+          </div>
+        </section>
+
+        <section class="evaluation-recommendation" data-result-recommendation hidden>
+          <span>Rekomendasi belajar</span>
+          <h2>Perkuat pemahaman sebelum mencoba kembali</h2>
+          <p>Baca ulang materi yang masih sulit, lalu ulangi evaluasi. Jawaban dan waktu akan dimulai kembali dari awal.</p>
+          <div class="evaluation-recommendation-actions">
+            <a class="button evaluation-material-action" href="materi.html">Baca ulang materi</a>
+            <a class="button evaluation-retry-action" href="quiz.html" data-retry-quiz>Ulangi evaluasi</a>
+          </div>
+        </section>
+
+        <div class="evaluation-result-actions">
+          <a class="button evaluation-dashboard-action" href="index.html">Kembali ke dashboard</a>
+          <a class="button evaluation-retry-link" href="quiz.html" data-retry-quiz data-pass-retry>Kerjakan ulang</a>
+        </div>
+      </section>
+    </main>
+    <script src="js/session.js"></script>
+    <script src="js/quiz.js"></script>
+  </body>
+</html>

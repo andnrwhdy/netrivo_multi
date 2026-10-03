@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Petualangan Jaringan</title>
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<div id="app">
+
+  <!-- ===== MENU UTAMA ===== -->
+  <section id="menuScreen" class="screen active">
+    <div class="menu-box">
+      <h1 class="game-title">PETUALANGAN<br><span>JARINGAN</span></h1>
+      <p class="subtitle">Kumpulkan Data, Hubungkan Dunia!</p>
+      <div class="menu-buttons">
+        <button id="btnStart" class="btn btn-green">▶ Mulai Game</button>
+        <button id="btnHelp" class="btn btn-blue">📖 Petunjuk</button>
+        <button id="btnSettings" class="btn btn-dark">⚙ Pengaturan</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== PETUNJUK ===== -->
+  <section id="helpScreen" class="screen">
+    <div class="panel">
+      <h2>📖 Petunjuk Game</h2>
+      <ul class="help-list">
+        <li><b>&larr; &rarr;</b> atau <b>A / D</b> — berjalan kiri / kanan</li>
+        <li><b>Spasi</b> atau <b>&uarr;</b> — melompat</li>
+        <li>Kumpulkan semua <b>paket data 📄</b> yang tersebar di level</li>
+        <li>Hindari <b>firewall/api 🔥</b> dan <b>lubang</b> di jalan</li>
+        <li>Capai <b>Server Tujuan</b> setelah semua data terkumpul</li>
+      </ul>
+      <button class="btn btn-blue backBtn">⬅ Kembali</button>
+    </div>
+  </section>
+
+  <!-- ===== PENGATURAN ===== -->
+  <section id="settingsScreen" class="screen">
+    <div class="panel">
+      <h2>⚙ Pengaturan</h2>
+      <div class="setting-row">
+        <span>Efek Suara</span>
+        <button id="toggleSound" class="toggle on">ON</button>
+      </div>
+      <div class="setting-row">
+        <span>Jumlah Nyawa</span>
+        <select id="livesSelect">
+          <option value="3" selected>3</option>
+          <option value="5">5</option>
+        </select>
+      </div>
+      <button class="btn btn-blue backBtn">⬅ Kembali</button>
+    </div>
+  </section>
+
+  <!-- ===== LAYAR GAME ===== -->
+  <section id="gameScreen" class="screen">
+    <div id="hud">
+      <div class="hud-item">❤️ x<span id="hudLives">3</span></div>
+      <div class="hud-item">📄 <span id="hudPackets">0</span>/<span id="hudTotal">0</span></div>
+      <div class="hud-item">⏱ <span id="hudTime">02:30</span></div>
+      <div class="hud-item">Level <span id="hudLevel">1-1</span></div>
+    </div>
+    <div id="hint"></div>
+    <canvas id="gameCanvas" width="800" height="450"></canvas>
+  </section>
+
+  <!-- ===== LEVEL SELESAI ===== -->
+  <section id="winScreen" class="screen">
+    <div class="panel result-panel win">
+      <h2>🌟 LEVEL SELESAI!</h2>
+      <p>Semua data berhasil dikirim ke server tujuan.</p>
+      <button id="btnNext" class="btn btn-green">▶ Level Berikutnya</button>
+      <button class="btn btn-blue toMenuBtn">🏠 Kembali ke Menu</button>
+    </div>
+  </section>
+
+  <!-- ===== GAME OVER ===== -->
+  <section id="overScreen" class="screen">
+    <div class="panel result-panel over">
+      <h2>💥 GAME OVER</h2>
+      <p id="overReason">Data tidak lengkap! Coba lagi.</p>
+      <button id="btnRetry" class="btn btn-red">🔄 Ulangi Level</button>
+      <button class="btn btn-blue toMenuBtn">🏠 Kembali ke Menu</button>
+    </div>
+  </section>
+
+</div>
+<script src="script.js"></script>
+</body>
+</html>

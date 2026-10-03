@@ -1,0 +1,489 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Netrivo Go - Game Jaringan</title>
+<style>
+:root{
+  --bg:#08111f; --panel:#101b2d; --border:#293a55; --text:#edf6f7; --muted:#91a9ba;
+  --accent:#3bc9db; --accent2:#ffbf3f; --good:#39d98a; --warn:#ffbf3f; --bad:#ff5c8a;
+  box-sizing:border-box;
+  padding-top:env(safe-area-inset-top,0px); padding-bottom:env(safe-area-inset-bottom,0px);
+}
+*{box-sizing:border-box;}
+html{scroll-padding-top:env(safe-area-inset-top,0px);}
+body{margin:0;background:#081321;color:var(--text);font-family:"Segoe UI Variable Text","Segoe UI",Arial,Helvetica,sans-serif;font-weight:400;line-height:1.55;letter-spacing:0;}
+.wrap{max-width:980px;margin:0 auto;padding:20px 18px 14px;}
+header{display:flex;align-items:center;justify-content:space-between;gap:20px;margin-bottom:18px;padding:0 0 14px;border-bottom:1px solid #31445e;flex-wrap:wrap;}
+.brand{display:flex;align-items:center;gap:10px;}
+.brand-logo{width:52px;height:46px;display:block;object-fit:contain;filter:drop-shadow(0 5px 8px rgba(255,45,153,.2));}
+.brand span:last-child::before{content:"";display:inline-block;width:6px;height:6px;margin-right:6px;border-radius:50%;background:var(--good);box-shadow:0 0 8px var(--good);animation:blink 1.6s infinite;}
+@keyframes blink{50%{opacity:.3;}}
+.brand h1{margin:0;font-family:"Bahnschrift SemiBold","Segoe UI",Arial,sans-serif;font-size:1.28rem;font-weight:600;line-height:1.15;letter-spacing:0;}
+.brand span{display:block;margin-top:3px;color:#8ba8bb;font-size:.72rem;font-weight:400;}
+.hud{display:flex;gap:0;}
+.hud div{min-width:86px;padding:1px 14px;border-left:1px solid #31445e;color:#8ba8bb;font-size:.68rem;line-height:1.3;}
+.hud strong{display:block;margin-top:3px;color:var(--text);font-family:"Cascadia Mono",Consolas,"Courier New",monospace;font-size:.9rem;font-weight:500;}
+.hud b{color:var(--accent);font-weight:600;}
+.mission{position:relative;margin-bottom:18px;padding:10px 0 12px 20px;border-bottom:1px solid #31445e;background:transparent;font-size:.9rem;color:#9bb3c3;}
+.mission::before{content:"";position:absolute;left:0;top:8px;bottom:12px;width:2px;background:var(--accent2);}
+.mission-kicker{display:flex;justify-content:space-between;margin-bottom:6px;color:#eab94e;font-size:.68rem;font-weight:600;}
+.mission-kicker em{color:var(--good);font-style:normal;}
+.mission b{color:var(--text);}
+.mission-meter{display:flex;align-items:center;gap:10px;margin-top:8px;font-family:Consolas,"Courier New",monospace;font-size:.68rem;color:var(--accent);}
+.mission-meter>i{height:5px;flex:1;overflow:hidden;border-radius:10px;background:#26344f;}
+.mission-meter b{display:block;width:0;height:100%;border-radius:inherit;background:linear-gradient(90deg,var(--accent2),var(--accent),var(--good));transition:width .35s ease;}
+main{display:flex;gap:0;align-items:stretch;overflow:hidden;border-top:1px solid #38506d;border-bottom:1px solid #38506d;background:#0b1525;}
+#stage-col{flex:1 1 0;min-width:240px;}
+.stage-caption{height:38px;padding:0 14px;display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid #31445e;color:#8ba8bb;font-size:.68rem;}
+.stage-caption span:first-child{color:var(--accent);}
+#stage{position:relative;width:100%;aspect-ratio:1/1;background:
+  linear-gradient(var(--border) 1px,transparent 1px) 0 0/12.5% 12.5%,
+  linear-gradient(90deg,var(--border) 1px,transparent 1px) 0 0/12.5% 12.5%,
+  radial-gradient(circle at 50% 50%,#101c33,#0B1220 70%);
+  overflow:hidden;box-shadow:inset 0 0 40px rgba(59,201,219,.05);}
+#stage::after{content:"";position:absolute;z-index:1;left:0;right:0;top:-25%;height:25%;pointer-events:none;background:linear-gradient(180deg,transparent,rgba(76,201,240,.08),transparent);animation:scan 4.5s linear infinite;}
+@keyframes scan{to{top:110%;}}
+#lines{position:absolute;z-index:2;inset:0;width:100%;height:100%;}
+#lines line{stroke-dasharray:2 1;animation:dataFlow 1.2s linear infinite;}
+@keyframes dataFlow{to{stroke-dashoffset:-6;}}
+.node{position:absolute;z-index:3;transform:translate(-50%,-50%);text-align:center;cursor:grab;user-select:none;touch-action:none;}
+.node .ico{width:56px;height:56px;border-radius:3px;background:#121f34;border:2px solid var(--accent2);display:flex;align-items:center;justify-content:center;font-size:26px;box-shadow:4px 4px 0 rgba(255,191,63,.08);transition:.15s;}
+.router-symbol{position:relative;width:34px;height:21px;display:block;border:2px solid var(--accent);border-radius:4px;background:linear-gradient(180deg,#17314a,#0c1c2d);box-shadow:inset 0 -4px 0 rgba(59,201,219,.12);}
+.router-symbol::before,.router-symbol::after{content:"";position:absolute;top:-11px;width:2px;height:12px;border-radius:2px;background:var(--accent);transform-origin:bottom;}
+.router-symbol::before{left:5px;transform:rotate(-20deg);}
+.router-symbol::after{right:5px;transform:rotate(20deg);}
+.router-symbol i{position:absolute;left:7px;bottom:4px;width:3px;height:3px;border-radius:50%;background:var(--good);box-shadow:8px 0 0 var(--accent2),16px 0 0 var(--good);}
+.switch-symbol{position:relative;width:36px;height:22px;display:block;border:2px solid var(--accent);border-radius:4px;background:#102b3d;}
+.switch-symbol::before{content:"";position:absolute;left:5px;bottom:4px;width:4px;height:3px;background:var(--good);box-shadow:7px 0 0 var(--accent2),14px 0 0 var(--good),21px 0 0 var(--accent);}
+.switch-symbol::after{content:"↔";position:absolute;inset:-5px 0 auto;text-align:center;color:var(--accent);font:600 14px/1 "Cascadia Mono",Consolas,monospace;}
+.device-symbol{position:relative;display:block;color:#8fe7ef;}
+.computer-symbol{width:27px;height:19px;border:2px solid currentColor;border-radius:2px;background:#10283a;}
+.computer-symbol::before{content:"";position:absolute;left:11px;bottom:-7px;width:3px;height:5px;background:currentColor;}
+.computer-symbol::after{content:"";position:absolute;left:6px;bottom:-9px;width:13px;height:2px;background:currentColor;}
+.laptop-symbol{width:26px;height:18px;border:2px solid currentColor;border-radius:2px 2px 0 0;background:#10283a;}
+.laptop-symbol::after{content:"";position:absolute;left:-5px;right:-5px;bottom:-6px;height:4px;border:2px solid currentColor;border-top:0;border-radius:0 0 5px 5px;}
+.printer-symbol{width:27px;height:18px;border:2px solid currentColor;border-radius:3px;background:#10283a;}
+.printer-symbol::before{content:"";position:absolute;left:5px;right:5px;top:-9px;height:10px;border:2px solid currentColor;background:#132238;}
+.printer-symbol::after{content:"";position:absolute;left:6px;right:6px;bottom:3px;height:2px;background:var(--accent2);}
+.server-symbol{width:22px;height:29px;border:2px solid currentColor;border-radius:3px;background:#10283a;}
+.server-symbol::before{content:"";position:absolute;left:4px;right:4px;top:8px;height:2px;background:currentColor;box-shadow:0 7px 0 currentColor;}
+.server-symbol::after{content:"";position:absolute;right:3px;top:3px;width:3px;height:3px;border-radius:50%;background:var(--good);box-shadow:0 7px 0 var(--accent2),0 14px 0 var(--good);}
+.phone-symbol{width:16px;height:29px;border:2px solid currentColor;border-radius:4px;background:#10283a;}
+.phone-symbol::before{content:"";position:absolute;left:4px;right:4px;top:3px;height:2px;background:currentColor;}
+.phone-symbol::after{content:"";position:absolute;left:5px;bottom:2px;width:3px;height:3px;border-radius:50%;background:var(--good);}
+.camera-symbol{width:27px;height:18px;border:2px solid currentColor;border-radius:3px;background:#10283a;}
+.camera-symbol::before{content:"";position:absolute;right:4px;top:3px;width:8px;height:8px;border:2px solid var(--accent2);border-radius:50%;}
+.camera-symbol::after{content:"";position:absolute;left:5px;bottom:-7px;width:15px;height:5px;border-left:2px solid currentColor;border-bottom:2px solid currentColor;transform:skewX(-24deg);}
+.tv-symbol{width:29px;height:20px;border:2px solid currentColor;border-radius:3px;background:#10283a;}
+.tv-symbol::before{content:"";position:absolute;left:8px;top:-8px;width:9px;height:8px;border-left:2px solid currentColor;border-right:2px solid currentColor;transform:skewX(-25deg);}
+.tv-symbol::after{content:"";position:absolute;left:9px;bottom:-6px;width:8px;height:4px;border-left:2px solid currentColor;border-right:2px solid currentColor;}
+.node:hover .ico,.device:hover .ico{transform:translateY(-2px);filter:brightness(1.18);}
+.node .lbl{font-size:.68rem;color:#a7bbc8;margin-top:5px;white-space:nowrap;}
+.node .ports{font-family:"Cascadia Mono",Consolas,"Courier New",monospace;font-size:.6rem;color:var(--accent2);}
+.device{position:absolute;z-index:3;transform:translate(-50%,-50%);text-align:center;cursor:grab;user-select:none;touch-action:none;animation:deviceIn .36s both;}
+.node.dragging,.device.dragging{z-index:7;cursor:grabbing;}
+.node.dragging .ico,.device.dragging .ico{filter:brightness(1.15);}
+@keyframes deviceIn{from{opacity:0;transform:translate(-50%,-42%) scale(.86);}to{opacity:1;transform:translate(-50%,-50%) scale(1);}}
+.device .ico{width:44px;height:44px;border-radius:50%;background:var(--panel);border:2px solid var(--border);display:flex;align-items:center;justify-content:center;font-size:20px;transition:.15s;position:relative;}
+.device .lbl{font-size:.66rem;color:#9fb5c4;margin-top:5px;white-space:nowrap;}
+.device.selected .ico{border-color:var(--accent);box-shadow:0 0 0 6px rgba(76,201,240,.15);}
+.device.connected .ico{border-color:var(--good);box-shadow:0 0 12px rgba(57,217,138,.24);animation:connectIn .32s ease-out;}
+@keyframes connectIn{50%{transform:scale(1.16);}}
+.device.infected .ico{border-color:var(--bad);animation:shake .3s infinite;}
+.device .virus{position:absolute;z-index:5;top:-13px;right:-25px;min-width:38px;height:22px;padding:0 4px;display:grid;place-items:center;border:2px solid #ff7cb8;border-radius:4px;background:#5c1136;color:#fff;font-size:.5rem;font-weight:700;letter-spacing:.03em;filter:drop-shadow(0 0 7px var(--bad));animation:pulse .65s infinite;}
+@keyframes pulse{50%{transform:scale(1.25);}}
+@keyframes shake{25%{transform:translateX(-2px);}75%{transform:translateX(2px);}}
+#virusAlert{position:absolute;z-index:6;left:12px;right:12px;bottom:12px;display:none;align-items:center;gap:9px;padding:8px 10px;border-left:3px solid var(--bad);background:rgba(71,10,43,.94);color:#ffd8ea;font-size:.72rem;font-weight:600;box-shadow:0 8px 24px rgba(247,37,133,.16);}
+#virusAlert.show{display:flex;animation:alertIn .2s ease-out;}
+#virusAlert i{height:4px;flex:1;overflow:hidden;border-radius:8px;background:rgba(255,255,255,.2);}
+#virusAlert b{display:block;width:100%;height:100%;background:var(--bad);transform-origin:left;}
+#virusAlert.show b{animation:threatTime 5s linear forwards;}
+@keyframes threatTime{to{transform:scaleX(0);}}
+@keyframes alertIn{from{transform:translateY(8px);opacity:0;}}
+#panel{flex:0 0 210px;display:flex;flex-direction:column;border-left:1px solid #31445e;background:#0e192a;}
+.card{padding:14px 16px 16px;border-bottom:1px solid #31445e;}
+.card:last-child{flex:1;border-bottom:0;}
+.card h3{display:flex;align-items:center;justify-content:space-between;margin:0 0 12px;color:#eab94e;font-family:"Bahnschrift SemiBold","Segoe UI",Arial,sans-serif;font-size:.74rem;font-weight:600;}
+.card h3 span{color:var(--good);font-size:.56rem;}
+#log{font-family:"Cascadia Mono",Consolas,"Courier New",monospace;font-size:.68rem;line-height:1.55;color:var(--muted);height:80px;overflow-y:auto;}
+#log div{position:relative;padding:5px 0 5px 10px;border-bottom:1px solid rgba(41,58,85,.55);animation:logIn .22s ease-out;}
+#log div::before{content:">";position:absolute;left:0;color:#4c6579;}
+@keyframes logIn{from{opacity:0;transform:translateY(-4px);}}
+#log .ok{color:var(--good);} #log .err{color:var(--bad);} #log .info{color:var(--accent);}
+.hint{font-size:.74rem;line-height:1.5;color:var(--muted);}
+.play-steps{margin:0;padding:0;display:grid;gap:9px;list-style:none;counter-reset:step;}
+.play-steps li{position:relative;padding-left:23px;}
+.play-steps li::before{counter-increment:step;content:"0" counter(step);position:absolute;left:0;top:1px;color:var(--accent);font-family:Consolas,"Courier New",monospace;font-size:.58rem;}
+#overlay{position:fixed;inset:0;background:rgba(6,9,18,.82);display:none;align-items:center;justify-content:center;padding:16px;z-index:10;}
+#overlay.show{display:flex;}
+.modal{background:var(--panel);border:1px solid var(--border);padding:26px;max-width:420px;width:100%;box-shadow:8px 10px 0 rgba(3,10,20,.35);}
+.modal h2{margin:0 0 10px;font-size:1.1rem;}
+.modal p{color:var(--muted);font-size:.9rem;line-height:1.5;}
+.opt{display:block;width:100%;text-align:left;background:#0f1730;border:0;border-left:2px solid var(--border);color:var(--text);padding:10px 12px;margin:8px 0;cursor:pointer;font-family:inherit;font-size:.9rem;}
+.opt:hover{border-color:var(--accent);}
+.opt.correct{border-color:var(--good);background:rgba(61,220,151,.12);}
+.opt.wrong{border-color:var(--bad);background:rgba(247,37,133,.12);}
+.fact{background:#0f1730;border-left:3px solid var(--accent);border-radius:8px;padding:10px 12px;margin-top:10px;font-size:.82rem;color:var(--text);}
+.btn{display:inline-block;margin-top:14px;background:var(--accent2);color:#101622;border:none;border-radius:4px;padding:10px 18px;font-family:inherit;font-size:.9rem;cursor:pointer;font-weight:600;}
+.btn:hover{filter:brightness(1.1);}
+.final-title{display:flex;align-items:center;gap:9px;}
+.success-mark{position:relative;flex:none;width:19px;height:19px;border-radius:4px;background:var(--good);}
+.success-mark::after{content:"";position:absolute;left:50%;top:50%;width:5px;height:9px;border:solid #0b3324;border-width:0 3px 3px 0;transform:translate(-50%,-50%) rotate(45deg);}
+.stars{display:flex;align-items:center;gap:8px;margin:16px 0;}
+.stars svg{width:34px;height:34px;stroke-width:2;stroke-linejoin:round;}
+.stars .filled{fill:var(--accent2);stroke:#d99816;}
+.stars .empty{fill:none;stroke:#c6d7e2;}
+.final-score{color:var(--text)!important;font-family:"Cascadia Mono",Consolas,monospace;}
+@media (max-width:440px){
+  .wrap{padding:12px 10px 20px;}
+  .brand h1{font-size:1.05rem;}
+  .hud{width:100%;justify-content:space-between;gap:5px;}
+  .hud div{flex:1;padding:4px 8px;}
+  main{flex-direction:column;}
+  #stage-col{width:100%;min-width:0;}
+  #panel{flex:1 1 auto;width:100%;border-left:0;border-top:1px solid var(--border);}
+  #log{height:80px;}
+}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header>
+    <div class="brand">
+      <img class="brand-logo" src="assets/images/DESAIN GRAFIS logo 2.png" alt="Logo Netrivo Go">
+      <div><h1>Netrivo Go</h1><span>Simulator jaringan kantor</span></div>
+    </div>
+    <div class="hud">
+      <div>Level<strong><b id="lvlNum">1</b> / 03</strong></div>
+      <div>Skor<strong><b id="score">0</b> pts</strong></div>
+      <div>Anggaran<strong><b id="budget">0</b> unit</strong></div>
+    </div>
+  </header>
+  <div class="mission">
+    <div class="mission-kicker"><span>Briefing misi</span><em>Sistem aktif</em></div>
+    <div id="mission"></div>
+    <div class="mission-meter"><span id="missionProgress">0 perangkat</span><i><b id="missionBar"></b></i></div>
+  </div>
+  <main>
+    <div id="stage-col">
+      <div class="stage-caption"><span>Topologi aktif</span><span id="nodeStatus">Menunggu input</span></div>
+      <div id="stage">
+        <svg id="lines" viewBox="0 0 100 100" preserveAspectRatio="none"></svg>
+        <div id="virusAlert"><span>Virus terdeteksi</span><i><b></b></i></div>
+      </div>
+    </div>
+    <div id="panel">
+      <div class="card">
+        <h3>Protokol misi <span>01</span></h3>
+        <ol class="hint play-steps">
+          <li>Pilih perangkat pada peta.</li>
+          <li>Hubungkan ke Router atau Switch.</li>
+          <li>Tekan virus saat peringatan muncul.</li>
+        </ol>
+      </div>
+      <div class="card">
+        <h3>Aktivitas jaringan <span>Live</span></h3>
+        <div id="log"></div>
+      </div>
+    </div>
+  </main>
+</div>
+
+<div id="overlay"><div class="modal" id="modalBody"></div></div>
+
+<script>
+const DEVICE_ICONS = {
+  router:'<span class="router-symbol" aria-hidden="true"><i></i></span>',
+  switch:'<span class="switch-symbol" aria-hidden="true"></span>',
+  computer:'<span class="device-symbol computer-symbol" aria-hidden="true"></span>',
+  laptop:'<span class="device-symbol laptop-symbol" aria-hidden="true"></span>',
+  printer:'<span class="device-symbol printer-symbol" aria-hidden="true"></span>',
+  server:'<span class="device-symbol server-symbol" aria-hidden="true"></span>',
+  phone:'<span class="device-symbol phone-symbol" aria-hidden="true"></span>',
+  camera:'<span class="device-symbol camera-symbol" aria-hidden="true"></span>',
+  tv:'<span class="device-symbol tv-symbol" aria-hidden="true"></span>'
+};
+
+const LEVELS = [
+ { mission:"Hubungkan 3 perangkat ke <b>Router</b>. Perhatikan port &amp; anggaran!", budget:55,
+   nodes:[{id:'hub',name:'Router',icon:DEVICE_ICONS.router,ports:3,x:50,y:18,used:0}],
+   devices:[
+     {id:'d1',name:'Komputer',icon:DEVICE_ICONS.computer,x:20,y:70},
+     {id:'d2',name:'Laptop',icon:DEVICE_ICONS.laptop,x:50,y:80},
+     {id:'d3',name:'Printer',icon:DEVICE_ICONS.printer,x:80,y:70}],
+   virus:false,
+   quiz:{q:"Apa fungsi utama Router?", options:["Mencetak dokumen","Mengatur lalu lintas data antar jaringan","Menyimpan file di cloud"], correct:1,
+     fact:"Router bertugas mengarahkan paket data supaya sampai ke tujuan yang tepat, baik antar perangkat di rumah/kantor maupun ke internet."}},
+ { mission:"5 perangkat, tapi Router cuma sisa sedikit port. Pakai <b>Switch</b> untuk tambahan port!", budget:85,
+   nodes:[{id:'hub',name:'Router',icon:DEVICE_ICONS.router,ports:2,x:30,y:15,used:0},{id:'sw',name:'Switch',icon:DEVICE_ICONS.switch,ports:4,x:75,y:15,used:0}],
+   devices:[
+     {id:'d1',name:'Komputer 1',icon:DEVICE_ICONS.computer,x:10,y:70},
+     {id:'d2',name:'Komputer 2',icon:DEVICE_ICONS.computer,x:32,y:81},
+     {id:'d3',name:'Laptop',icon:DEVICE_ICONS.laptop,x:55,y:81},
+     {id:'d4',name:'Printer',icon:DEVICE_ICONS.printer,x:75,y:70},
+     {id:'d5',name:'Server',icon:DEVICE_ICONS.server,x:92,y:55}],
+   virus:false,
+   quiz:{q:"Kenapa kita perlu Switch kalau sudah ada Router?", options:["Switch menambah jumlah port supaya lebih banyak perangkat tersambung","Switch mengganti fungsi kabel LAN","Switch bikin sinyal WiFi lebih kuat"], correct:0,
+     fact:"Switch menambah jumlah 'colokan' (port) di jaringan lokal, jadi Router tidak perlu punya port sebanyak jumlah perangkat yang ada."}},
+ { mission:"Jaringan makin ramai — waspada <b>virus</b>! Klik label VIRUS sebelum waktu habis.", budget:100,
+   nodes:[{id:'hub',name:'Router',icon:DEVICE_ICONS.router,ports:2,x:50,y:14,used:0},{id:'sw',name:'Switch',icon:DEVICE_ICONS.switch,ports:4,x:50,y:50,used:0}],
+   devices:[
+     {id:'d1',name:'Laptop 1',icon:DEVICE_ICONS.laptop,x:12,y:70},
+     {id:'d2',name:'Laptop 2',icon:DEVICE_ICONS.laptop,x:30,y:81},
+     {id:'d3',name:'HP',icon:DEVICE_ICONS.phone,x:50,y:85},
+     {id:'d4',name:'Server',icon:DEVICE_ICONS.server,x:70,y:81},
+     {id:'d5',name:'Kamera CCTV',icon:DEVICE_ICONS.camera,x:88,y:70},
+     {id:'d6',name:'Smart TV',icon:DEVICE_ICONS.tv,x:15,y:35}],
+   virus:true,
+   quiz:{q:"Apa fungsi Firewall dalam jaringan?", options:["Mempercepat koneksi WiFi","Menyaring &amp; memblokir lalu lintas data mencurigakan","Menambah jumlah IP address"], correct:1,
+     fact:"Firewall menyaring lalu lintas data dan memblokir akses berbahaya atau tidak sah, supaya jaringan tetap aman dari serangan seperti virus."}}
+];
+
+let li=0, score=0, budget=0, selected=null, virusTimer=null, spawnTimer=null, virusBlocked=false;
+let dragState=null;
+const stage=document.getElementById('stage'), lines=document.getElementById('lines');
+const logEl=document.getElementById('log');
+const virusAlert=document.getElementById('virusAlert');
+
+function log(msg,cls){ const d=document.createElement('div'); if(cls) d.className=cls; d.textContent=msg; logEl.prepend(d); }
+function dist(a,b){ return Math.hypot(a.x-b.x,a.y-b.y); }
+function cost(a,b){ return Math.max(4, Math.round(dist(a,b)/8)); }
+
+function loadLevel(i){
+  const L=LEVELS[i];
+  budget=L.budget; selected=null; virusBlocked=false;
+  document.getElementById('mission').innerHTML='Misi: '+L.mission;
+  document.getElementById('lvlNum').textContent=(i+1);
+  document.getElementById('budget').textContent=budget;
+  logEl.innerHTML=''; lines.innerHTML='';
+  stage.querySelectorAll('.node,.device').forEach(e=>e.remove());
+  L.nodes.forEach(n=>{ n.used=0; stage.appendChild(makeNodeEl(n)); });
+  L.devices.forEach((d,index)=>{
+    d.connected=false; d.node=null; d.virus=false; d.infected=false;
+    const deviceEl=makeDeviceEl(d);
+    deviceEl.style.animationDelay=(index*55)+'ms';
+    stage.appendChild(deviceEl);
+  });
+  log('Level '+(i+1)+' dimuat. '+L.devices.length+' perangkat menunggu koneksi.','info');
+  clearTimeout(spawnTimer); clearTimeout(virusTimer); hideVirusAlert();
+  updateProgress(L);
+  if(L.virus){ scheduleVirus(L,2200); }
+}
+
+function updateProgress(L){
+  const connected=L.devices.filter(d=>d.connected).length;
+  const complete=connected===L.devices.length;
+  document.getElementById('missionProgress').textContent=complete && L.virus && !virusBlocked
+    ? 'Blokir 1 ancaman'
+    : connected+' / '+L.devices.length+' terhubung';
+  document.getElementById('missionBar').style.width=((connected/L.devices.length)*100)+'%';
+  document.getElementById('nodeStatus').textContent=complete && L.virus && !virusBlocked
+    ? 'AMANKAN JARINGAN'
+    : connected+' jalur aktif';
+}
+
+function makeNodeEl(n){
+  const el=document.createElement('div'); el.className='node'; el.id='n_'+n.id;
+  el.style.left=n.x+'%'; el.style.top=n.y+'%';
+  el.innerHTML='<div class="ico">'+n.icon+'</div><div class="lbl">'+n.name+'</div><div class="ports" id="ports_'+n.id+'">'+n.used+'/'+n.ports+' port</div>';
+  el.setAttribute('aria-label',n.name);
+  installDrag(el,n,'node',()=>onNodeClick(n));
+  return el;
+}
+function makeDeviceEl(d){
+  const el=document.createElement('div'); el.className='device'; el.id='d_'+d.id;
+  el.style.left=d.x+'%'; el.style.top=d.y+'%';
+  el.innerHTML='<div class="ico">'+d.icon+'</div><div class="lbl">'+d.name+'</div>';
+  el.setAttribute('aria-label',d.name);
+  installDrag(el,d,'device',()=>onDeviceClick(d));
+  return el;
+}
+
+function installDrag(el,item,type,onTap){
+  el.addEventListener('pointerdown',e=>{
+    if(e.pointerType==='mouse' && e.button!==0) return;
+    e.preventDefault();
+    el.style.animation='none';
+    dragState={pointerId:e.pointerId,el,item,type,startX:e.clientX,startY:e.clientY,moved:false};
+    el.setPointerCapture(e.pointerId);
+  });
+  el.addEventListener('pointermove',e=>{
+    if(!dragState || dragState.pointerId!==e.pointerId || dragState.el!==el) return;
+    const travel=Math.hypot(e.clientX-dragState.startX,e.clientY-dragState.startY);
+    if(travel<5 && !dragState.moved) return;
+    dragState.moved=true;
+    el.classList.add('dragging');
+    const rect=stage.getBoundingClientRect();
+    item.x=Math.max(8,Math.min(92,((e.clientX-rect.left)/rect.width)*100));
+    item.y=Math.max(9,Math.min(91,((e.clientY-rect.top)/rect.height)*100));
+    el.style.left=item.x+'%';
+    el.style.top=item.y+'%';
+    refreshConnections(item,type);
+  });
+  const finish=e=>{
+    if(!dragState || dragState.pointerId!==e.pointerId || dragState.el!==el) return;
+    const moved=dragState.moved;
+    el.classList.remove('dragging');
+    if(el.hasPointerCapture(e.pointerId)) el.releasePointerCapture(e.pointerId);
+    dragState=null;
+    if(!moved) onTap();
+  };
+  el.addEventListener('pointerup',finish);
+  el.addEventListener('pointercancel',e=>{
+    if(!dragState || dragState.pointerId!==e.pointerId || dragState.el!==el) return;
+    el.classList.remove('dragging');
+    dragState=null;
+  });
+}
+
+function refreshConnections(item,type){
+  const L=LEVELS[li];
+  if(type==='device'){
+    if(!item.connected) return;
+    const node=L.nodes.find(n=>n.id===item.node);
+    if(node) drawLine(item,node,item.id+'_'+node.id,item.infected?'#F72585':'#4CC9F0');
+    return;
+  }
+  L.devices.filter(d=>d.connected && d.node===item.id).forEach(d=>{
+    drawLine(d,item,d.id+'_'+item.id,d.infected?'#F72585':'#4CC9F0');
+  });
+}
+
+function onDeviceClick(d,e){
+  if(d.virus){ resolveVirus(d,true); return; }
+  if(d.connected){ log(d.name+' sudah terhubung.','info'); return; }
+  const el=document.getElementById('d_'+d.id);
+  if(selected===d){ selected=null; el.classList.remove('selected'); updateProgress(LEVELS[li]); return; }
+  if(selected){ document.getElementById('d_'+selected.id).classList.remove('selected'); }
+  selected=d; el.classList.add('selected');
+  document.getElementById('nodeStatus').textContent=d.name+' dipilih';
+  log('Memilih '+d.name+'. Klik Router/Switch untuk menyambungkan.');
+}
+
+function onNodeClick(n){
+  if(!selected){ log('Pilih perangkat dulu, baru klik '+n.name+'.','err'); return; }
+  if(n.used>=n.ports){ log(n.name+': port penuh!','err'); return; }
+  const L=LEVELS[li]; const c=cost(selected,n);
+  if(budget<c){ log('Anggaran tidak cukup untuk kabel ini (butuh '+c+').','err'); return; }
+  budget-=c; n.used++; selected.connected=true; selected.node=n.id;
+  document.getElementById('budget').textContent=budget;
+  document.getElementById('ports_'+n.id).textContent=n.used+'/'+n.ports+' port';
+  document.getElementById('d_'+selected.id).classList.remove('selected'); document.getElementById('d_'+selected.id).classList.add('connected');
+  drawLine(selected,n,selected.id+'_'+n.id);
+  log(selected.name+' → '+n.name+' tersambung (biaya '+c+').','ok');
+  addScore(10);
+  const finishedName=selected.name; selected=null;
+  updateProgress(L);
+  if(L.devices.every(x=>x.connected)){
+    if(L.virus && !virusBlocked){
+      log('Koneksi lengkap. Blokir satu virus untuk menuntaskan level.','info');
+      clearTimeout(spawnTimer); scheduleVirus(L,350);
+    } else {
+      setTimeout(()=>showQuiz(L),500);
+    }
+  }
+}
+
+function drawLine(d,n,id,color){
+  let line=document.getElementById('L_'+id);
+  if(!line){ line=document.createElementNS('http://www.w3.org/2000/svg','line'); line.id='L_'+id; lines.appendChild(line); }
+  line.setAttribute('x1',d.x); line.setAttribute('y1',d.y); line.setAttribute('x2',n.x); line.setAttribute('y2',n.y);
+  line.setAttribute('stroke', color||'#4CC9F0'); line.setAttribute('stroke-width','0.6');
+}
+
+function addScore(n){ score=Math.max(0,score+n); document.getElementById('score').textContent=score; }
+
+function scheduleVirus(L,delay){
+  clearTimeout(spawnTimer);
+  spawnTimer=setTimeout(()=>{
+    trySpawnVirus(L);
+    if(!virusBlocked) scheduleVirus(L,6500);
+  },delay);
+}
+function trySpawnVirus(L){
+  if(L.devices.some(d=>d.virus)) return;
+  const cand=L.devices.filter(d=>!d.virus && !d.infected);
+  if(!cand.length) return;
+  const d=cand[Math.floor(Math.random()*cand.length)];
+  d.virus=true; const el=document.getElementById('d_'+d.id);
+  const v=document.createElement('span'); v.className='virus'; v.textContent='VIRUS'; el.appendChild(v);
+  virusAlert.classList.remove('show'); void virusAlert.offsetWidth; virusAlert.classList.add('show');
+  document.getElementById('nodeStatus').textContent='Ancaman pada '+d.name;
+  log('Virus terdeteksi di '+d.name+'! Klik cepat untuk memblokir.','err');
+  clearTimeout(virusTimer);
+  virusTimer=setTimeout(()=>resolveVirus(d,false), 5000);
+}
+function resolveVirus(d,blocked){
+  clearTimeout(virusTimer); d.virus=false; hideVirusAlert();
+  const el=document.getElementById('d_'+d.id); const v=el.querySelector('.virus'); if(v) v.remove();
+  if(blocked){
+    virusBlocked=true; clearTimeout(spawnTimer); addScore(15);
+    log('Firewall memblokir virus di '+d.name+'! +15 skor.','ok');
+    updateProgress(LEVELS[li]);
+    document.getElementById('nodeStatus').textContent='Ancaman diblokir';
+    if(LEVELS[li].devices.every(x=>x.connected)) setTimeout(()=>showQuiz(LEVELS[li]),500);
+  }
+  else { d.infected=true; el.classList.add('infected'); addScore(-10);
+    const n=LEVELS[li].nodes.find(nn=>nn.id===d.node);
+    if(n) drawLine(d,n,d.id+'_'+n.id,'#F72585');
+    log(d.name+' terinfeksi virus! -10 skor.','err');
+    setTimeout(()=>{ d.infected=false; el.classList.remove('infected'); if(n) drawLine(d,n,d.id+'_'+n.id,'#4CC9F0'); log('Firewall membersihkan '+d.name+'.','info'); },4000);
+  }
+}
+
+function hideVirusAlert(){ virusAlert.classList.remove('show'); }
+
+function showQuiz(L){
+  clearTimeout(spawnTimer); clearTimeout(virusTimer); hideVirusAlert();
+  L.devices.forEach(d=>{ d.virus=false; const v=document.querySelector('#d_'+d.id+' .virus'); if(v) v.remove(); });
+  const m=document.getElementById('modalBody');
+  m.innerHTML='<h2>Kuis Kilat</h2><p>'+L.quiz.q+'</p>'+
+    L.quiz.options.map((o,i)=>'<button class="opt" data-i="'+i+'">'+o+'</button>').join('');
+  document.getElementById('overlay').classList.add('show');
+  m.querySelectorAll('.opt').forEach(btn=>btn.onclick=()=>{
+    m.querySelectorAll('.opt').forEach(b=>b.onclick=null);
+    const i=+btn.dataset.i;
+    if(i===L.quiz.correct){ btn.classList.add('correct'); addScore(20); }
+    else{ btn.classList.add('wrong'); m.querySelectorAll('.opt')[L.quiz.correct].classList.add('correct'); addScore(5); }
+    const fact=document.createElement('div'); fact.className='fact'; fact.textContent='Info: '+L.quiz.fact; m.appendChild(fact);
+    const next=document.createElement('button'); next.className='btn';
+    next.textContent = (li<LEVELS.length-1)?'Lanjut ke Level '+(li+2):'Lihat Hasil Akhir';
+    next.onclick=()=>{ document.getElementById('overlay').classList.remove('show');
+      if(li<LEVELS.length-1){ li++; loadLevel(li); } else { showFinal(); } };
+    m.appendChild(next);
+  });
+}
+
+function showFinal(){
+  const stars = score>=220?3:score>=110?2:1;
+  const m=document.getElementById('modalBody');
+  const starIcon=filled=>'<svg class="'+(filled?'filled':'empty')+'" viewBox="0 0 36 36" aria-hidden="true" focusable="false"><path d="M18 2.5 22.7 12l10.5 1.5-7.6 7.4 1.8 10.4L18 26.4l-9.4 4.9 1.8-10.4-7.6-7.4L13.3 12Z"/></svg>';
+  m.innerHTML='<h2 class="final-title">Jaringan Kantor Stabil! <span class="success-mark" aria-hidden="true"></span></h2><p>Semua level selesai. Total skor kamu:</p>'+ 
+    '<div class="stars" role="img" aria-label="'+stars+' dari 3 bintang">'+Array.from({length:3},(_,index)=>starIcon(index<stars)).join('')+'</div>'+ 
+    '<p class="final-score">SKOR AKHIR: '+score+'</p>'+ 
+    '<button class="btn" id="replay">Main Lagi</button>';
+  document.getElementById('overlay').classList.add('show');
+  document.getElementById('replay').onclick=()=>{ li=0; score=0; document.getElementById('score').textContent=0; document.getElementById('overlay').classList.remove('show'); loadLevel(0); };
+}
+
+function reportGameHeight(){
+  requestAnimationFrame(()=>{
+    const content=document.querySelector('.wrap');
+    const height=Math.ceil(content.getBoundingClientRect().height);
+    window.parent.postMessage({type:'netrivo-go-height',height},'*');
+  });
+}
+
+if('ResizeObserver' in window){
+  new ResizeObserver(reportGameHeight).observe(document.querySelector('.wrap'));
+}
+window.addEventListener('load',reportGameHeight);
+window.addEventListener('resize',reportGameHeight);
+
+loadLevel(0);
+reportGameHeight();
+</script>
+</body>
+</html>
