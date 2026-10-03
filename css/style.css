@@ -1529,38 +1529,9 @@ button:disabled { cursor: not-allowed; opacity: .55; }
   color: #667985;
   background: #f3f8fb;
 }
-.session-reset {
-  min-height: 38px;
-  padding: 8px 14px;
-  border: 1px solid #bdd3df;
-  border-radius: 6px;
-  color: #205c91;
-  background: #ffffff;
-  font: inherit;
-  font-size: 13px;
-  cursor: pointer;
-}
-.session-reset:hover {
-  background: #edf7fa;
-}
-.session-reset:focus-visible {
-  outline: 2px solid #147f99;
-  outline-offset: 3px;
-}
-.module-topbar:has(.session-reset) {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 8px;
-  padding-right: 16px;
-}
 @media (max-width: 400px) {
   .module-topbar .module-dashboard-link {
     padding: 0 10px;
-    font-size: 12px;
-  }
-  .module-topbar .session-reset {
-    padding: 8px 10px;
     font-size: 12px;
   }
 }

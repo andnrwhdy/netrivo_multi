@@ -27,14 +27,3 @@ document.addEventListener('click', (event) => {
 window.addEventListener('pageshow', (event) => {
   if (event.persisted) window.location.reload();
 });
-
-document.addEventListener('DOMContentLoaded', () => {
-  const host = document.querySelector('.module-topbar, .result-actions');
-  if (!host || host.querySelector('[data-reset-session]')) return;
-  const button = document.createElement('button');
-  button.type = 'button';
-  button.className = 'session-reset';
-  button.dataset.resetSession = '';
-  button.textContent = 'Mulai Ulang';
-  host.appendChild(button);
-});
