@@ -4,10 +4,8 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Netrivo - Platform Pembelajaran Jaringan</title>
-    <link rel="preconnect" href="https://fonts.googleapis.com" />
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link href="https://fonts.googleapis.com/css2?family=Bungee&display=swap" rel="stylesheet" />
     <link rel="stylesheet" href="css/style.css" />
+    <link rel="stylesheet" href="css/dashboard.css" />
   </head>
   <body class="netrivo-home wayground-inspired">
     <header class="netrivo-header">
@@ -15,6 +13,7 @@
         <img src="assets/images/DESAIN GRAFIS logo 1.png" alt="Netrivo" />
       </div>
       <div class="header-actions-modern">
+        <a class="dashboard-nav-link" href="#materi">Game</a>
         <a class="netrivo-nav-button evaluation-nav-button" href="#evaluasi-materi">Evaluasi</a>
         <a class="netrivo-nav-button" href="#materi-pilihan">Mulai Belajar</a>
       </div>
@@ -23,24 +22,29 @@
     <main>
       <section class="netrivo-hero">
         <div class="hero-copy">
+          <span class="dashboard-eyebrow">Belajar teori jaringan, selangkah demi selangkah</span>
           <h1>Netrivo</h1>
-          <p>Buat pengalaman belajar anda lebih menyenangkan di Netrivo</p>
-          <P>Kuasai ilmu dasar penerapan jaringan lebih mudah, adaptif dan interaktif di Netrivo</P>
+          <p>Jelajahi dasar jaringan, Cisco, dan MikroTik melalui materi interaktif yang mudah diikuti.</p>
+          <div class="dashboard-hero-actions">
+            <a class="dashboard-button dashboard-button-primary" href="#materi-pilihan">Mulai Belajar <span aria-hidden="true">&rarr;</span></a>
+          </div>
+        </div>
+        <div class="hero-showcase" aria-label="Video pengantar Netrivo">
+          <div class="showcase-window" data-video-playlist>
+            <video class="showcase-video is-active" autoplay muted playsinline preload="auto" data-playlist-video aria-label="Animasi jaringan komputer Netrivo">
+              <source src="assets/video/bahan1.mp4" type="video/mp4" />
+            </video>
+            <video class="showcase-video portrait-video" muted playsinline preload="auto" data-playlist-video aria-label="Video pembelajaran jaringan Netrivo">
+              <source src="assets/video/bahan2.mp4" type="video/mp4" />
+            </video>
+            <video class="showcase-video portrait-video" muted playsinline preload="metadata" data-playlist-video aria-label="Video simulasi jaringan">
+              <source src="assets/video/bahan3.mp4" type="video/mp4" />
+            </video>
+          </div>
         </div>
       </section>
 
-      <section class="hero-showcase" aria-label="Video pengantar Netrivo">
-        <div class="showcase-window" data-video-playlist>
-          <video class="showcase-video is-active" autoplay muted playsinline preload="auto" data-playlist-video aria-label="Animasi jaringan komputer Netrivo">
-            <source src="assets/video/bahan1.mp4" type="video/mp4" />
-          </video>
-          <video class="showcase-video portrait-video" muted playsinline preload="auto" data-playlist-video aria-label="Video pembelajaran jaringan Netrivo">
-            <source src="assets/video/bahan2.mp4" type="video/mp4" />
-          </video>
-          <video class="showcase-video portrait-video" muted playsinline preload="metadata" data-playlist-video aria-label="Video simulasi jaringan">
-            <source src="assets/video/bahan3.mp4" type="video/mp4" />
-          </video>
-        </div>
+      <section class="dashboard-trust" aria-label="Sumber dan komunitas teknologi">
         <div class="trust-badges" aria-label="Logo institusi dan teknologi">
           <span><img src="assets/images/1.png" alt="Institut Teknologi Bandung" /></span>
           <span><img src="assets/images/2.png" alt="SmarTech Institute of Technology" /></span>
@@ -54,18 +58,27 @@
         <p class="trust-copy">Dari Sumber & Komunitas Teknologi Terpercaya</p>
       </section>
 
-      <section class="platform-section" id="platform">
-        <h2>Platform komprehensif yang memfasilitasi kebutuhan belajar Jaringan Komputer</h2>
+      <section class="dashboard-progress" id="platform" aria-labelledby="dashboard-progress-title">
+        <div class="dashboard-progress-heading">
+          <span class="dashboard-section-kicker">Perjalanan belajarmu</span>
+          <h2 id="dashboard-progress-title">Progres Belajar</h2>
+          <p>Pantau langkah yang sudah selesai dan lanjutkan dari materi terakhir.</p>
+        </div>
+        <div class="dashboard-progress-card">
+          <div class="dashboard-progress-top"><span>Total progres</span><strong data-dashboard-percent>0%</strong></div>
+          <div class="dashboard-progress-track" role="progressbar" aria-label="Progres belajar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0"><span data-dashboard-bar></span></div>
+          <div class="dashboard-progress-bottom"><span data-dashboard-count>0 dari 12 langkah selesai</span><span data-dashboard-next>Mulai dari Pengantar Jaringan</span></div>
+        </div>
       </section>
 
       <section class="activity-section course-column" id="materi-pilihan" aria-label="Pilihan materi pembelajaran">
+        <div class="dashboard-section-heading"><div><span class="dashboard-section-kicker">Jalur pembelajaran</span><h2>Materi Pembelajaran</h2></div></div>
         <div class="course-overview-panel">
           <img class="course-panel-mascot course-panel-mascot-left" src="assets/images/icon/maskotbg1.png" alt="" aria-hidden="true" />
           <img class="course-panel-mascot course-panel-mascot-right" src="assets/images/icon/maskotbg2.png" alt="" aria-hidden="true" />
           <a class="course-material-card course-intro" href="materi.html">
             <span class="course-card-cover"></span>
             <span class="course-card-content">
-              <small>2 submateri</small>
               <strong>Pengantar Jaringan</strong>
               <span>Komponen jaringan, model OSI/TCP-IP, topologi, dan video pengantar.</span>
             </span>
@@ -74,7 +87,6 @@
           <a class="course-material-card course-cisco" href="cisco.html">
             <span class="course-card-cover"></span>
             <span class="course-card-content">
-              <small>4 submateri</small>
               <strong>Cisco Networking</strong>
               <span>Cisco IOS, router, switch, VLAN, dan routing dasar.</span>
             </span>
@@ -83,14 +95,15 @@
           <a class="course-material-card course-mikrotik" href="mikrotik.html">
             <span class="course-card-cover"></span>
             <span class="course-card-content">
-              <small>3 submateri</small>
               <strong>MikroTik</strong>
               <span>Pengenalan MikroTik, penggunaan Winbox, dan RouterOS.</span>
             </span>
             <span class="course-card-action">Lihat materi <b aria-hidden="true">&rarr;</b></span>
           </a>
           <div class="course-evaluation-action" id="evaluasi-materi">
-            <a href="quiz.html?mode=langsung" class="course-evaluation-button">Evaluasi Seluruh Materi <span aria-hidden="true">&rarr;</span></a>
+            <div class="dashboard-evaluation-icon" aria-hidden="true">&#10003;</div>
+            <div class="dashboard-evaluation-copy"><span class="dashboard-section-kicker">Uji pemahamanmu</span><h3>Evaluasi Akhir</h3><p>15 soal <span aria-hidden="true">&middot;</span> 15 menit</p></div>
+            <a href="quiz.html?mode=langsung" class="course-evaluation-button">Mulai Evaluasi <span aria-hidden="true">&rarr;</span></a>
           </div>
         </div>
       </section>
@@ -98,22 +111,17 @@
       <div class="platform-band">
         <section class="solutions-section" id="materi">
           <header class="solutions-heading">
-            <span>Solusi Belajar Netrivo</span>
-            <h2>Jalur Terobosan is Win-win Solution  </h2>
-            <p>Mainkan Game Sederhana  |  Belajar Tanpa Bosan Dengan Nuansa Hiburan</p>
+            <span>Belajar sambil bermain</span>
+            <h2>Game Pembelajaran</h2>
+            <p>Uji konsep jaringan melalui dua permainan interaktif Netrivo.</p>
           </header>
 
           <div class="solution-row">
             <div class="solution-copy">
-              <h3>NETRIVO GO</h3>
-              <p>Gama dengan tampilan sederhana </p>
-              <ul>
-                <li>Misi singkat dalam memahami konsep inti jaringan.</li>
-                <li>Simulasi interaktif memperlihatkan cara kerja perangkat secara visual.</li>
-                <li>Tantangan & kuis menguatkan pemahaman sebelum lanjut level.</li>
-                <li>Latihan menguatkan pemahaman sebelum evaluasi.</li>
-                <li>Urutan belajar tetap konsisten dari awal sampai akhir.</li>
-              </ul>
+              <span class="dashboard-game-label">Simulasi jaringan</span>
+              <h3>Netrivo Go</h3>
+              <p>Ikuti misi singkat dan pahami cara kerja perangkat jaringan lewat simulasi interaktif.</p>
+              <a class="dashboard-game-link" href="nethero-mini.html">Mainkan <span aria-hidden="true">&rarr;</span></a>
             </div>
             <div class="solution-game" aria-label="Game simulasi jaringan Netrivo Go">
               <iframe
@@ -127,14 +135,10 @@
 
           <div class="solution-row" id="progres">
             <div class="solution-copy">
-              <h3>Antarkan paket data sampai ke server tujuan.</h3>
+              <span class="dashboard-game-label">Petualangan jaringan</span>
+              <h3>Netrivo Adventure</h3>
               <p>Netrivo Adventure mengubah konsep aliran data menjadi tiga level platformer dengan tantangan yang meningkat.</p>
-              <ul>
-                <li>Kendalikan karakter untuk menjelajahi jalur jaringan secara langsung.</li>
-                <li>Rintangan firewall & lubang mengajarkan risiko di jaringan nyata.</li>
-                <li>Melatih fokus dan pengambilan keputusan cepat, seperti tantangan nyata seorang teknisi jaringan.</li>
-                <li>Mainkan dengan keyboard atau kontrol sentuh.</li>
-              </ul>
+              <a class="dashboard-game-link" href="petualangan-jaringan.html">Mainkan <span aria-hidden="true">&rarr;</span></a>
             </div>
             <div class="solution-game platformer-game" aria-label="Game platformer Petualangan Jaringan">
               <iframe
@@ -174,5 +178,6 @@
 
     <script src="js/session.js"></script>
     <script src="js/main.js"></script>
+    <script src="js/dashboard.js"></script>
   </body>
 </html>

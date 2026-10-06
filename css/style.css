@@ -3977,6 +3977,22 @@ button:disabled { cursor: not-allowed; opacity: .55; }
   font-weight: 800;
   line-height: 1.55;
 }
+.question-feedback.is-correct,
+.question-feedback.is-wrong {
+  padding: 12px 14px;
+  border-radius: 8px;
+  font-weight: 600;
+}
+.question-feedback.is-correct {
+  color: #14583f;
+  background: #e8f8ef;
+  border: 1px solid #a9dfbf;
+}
+.question-feedback.is-wrong {
+  color: #85334a;
+  background: #fff0f3;
+  border: 1px solid #f3b7c5;
+}
 .practice-task-list {
   display: grid;
   gap: 18px;
@@ -4301,6 +4317,20 @@ button:disabled { cursor: not-allowed; opacity: .55; }
   background: var(--module-accent-soft);
   box-shadow: inset 3px 0 0 var(--module-accent);
   opacity: 1;
+}
+.netrivo-lesson .practice-content .exercise-options button.selected-correct,
+.netrivo-lesson .practice-content .exercise-options button.selected-correct:disabled {
+  border-color: #75c997;
+  color: #14583f;
+  background: #e8f8ef;
+  box-shadow: inset 3px 0 0 #39a96b;
+}
+.netrivo-lesson .practice-content .exercise-options button.selected-wrong,
+.netrivo-lesson .practice-content .exercise-options button.selected-wrong:disabled {
+  border-color: #ed9bad;
+  color: #85334a;
+  background: #fff0f3;
+  box-shadow: inset 3px 0 0 #dc6b88;
 }
 .netrivo-evaluation .answer-list button:disabled {
   cursor: default;

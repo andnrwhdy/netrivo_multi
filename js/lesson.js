@@ -40,31 +40,36 @@ const lessons = {
         prompt: 'Pada model OSI, di lapisan manakah pemeriksaan dan penambahan header yang berisi MAC address terjadi?',
         options: ['Network Layer', 'Data Link Layer', 'Transport Layer', 'Physical Layer'],
         answer: 1,
-        explanation: 'Data Link Layer atau Layer 2 menambahkan MAC address pengirim dan penerima pada frame.'
+        explanation: 'Data Link Layer atau Layer 2 menambahkan MAC address pengirim dan penerima pada frame.',
+        wrongReasons: ['Network Layer memakai alamat IP untuk meneruskan paket, bukan menambahkan alamat MAC pada frame.', '', 'Transport Layer mengatur pengiriman data antar-aplikasi, bukan header MAC.', 'Physical Layer mengirim bit sebagai sinyal dan tidak memeriksa alamat MAC.']
       },
       {
         prompt: 'Sebuah perusahaan memiliki 8 server yang menerapkan topologi Full Mesh. Berapa jumlah jalur kabel yang diperlukan?',
         options: ['16 jalur', '28 jalur', '56 jalur', '64 jalur'],
         answer: 1,
-        explanation: 'Rumus Full Mesh adalah N(N-1)/2, sehingga 8 x 7 / 2 menghasilkan 28 jalur.'
+        explanation: 'Rumus Full Mesh adalah N(N-1)/2, sehingga 8 x 7 / 2 menghasilkan 28 jalur.',
+        wrongReasons: ['16 jalur terlalu sedikit karena setiap server harus terhubung langsung ke tujuh server lainnya.', '', '56 menghitung tiap sambungan dua kali; satu kabel menghubungkan sepasang server.', '64 berasal dari 8 x 8 dan ikut menghitung koneksi server ke dirinya sendiri.']
       },
       {
         prompt: 'Kelemahan utama topologi Star yang dapat melumpuhkan komunikasi seluruh client adalah...',
         options: ['Putusnya salah satu kabel client', 'Kerusakan terminator', 'Single point of failure pada switch pusat', 'Collision data yang tinggi'],
         answer: 2,
-        explanation: 'Semua node bergantung pada perangkat pusat, sehingga jaringan terputus ketika switch pusat gagal.'
+        explanation: 'Semua node bergantung pada perangkat pusat, sehingga jaringan terputus ketika switch pusat gagal.',
+        wrongReasons: ['Jika satu kabel client putus, biasanya hanya client itu yang terputus.', 'Terminator digunakan pada topologi Bus, bukan titik pusat topologi Star.', '', 'Masalah utamanya adalah kegagalan switch pusat, bukan collision data.']
       },
       {
         prompt: 'Mengapa topologi Ring bebas dari collision meskipun lalu lintas jaringan sedang padat?',
         options: ['Memiliki kabel cadangan otomatis', 'Menggunakan transmisi berbasis Token Passing', 'Menggunakan Switch Layer 3', 'Kecepatan transmisi menyesuaikan secara otomatis'],
         answer: 1,
-        explanation: 'Node hanya dapat mengirim data ketika memegang token digital, sehingga pengiriman tidak saling bertabrakan.'
+        explanation: 'Node hanya dapat mengirim data ketika memegang token digital, sehingga pengiriman tidak saling bertabrakan.',
+        wrongReasons: ['Kabel cadangan tidak menjelaskan pencegahan collision pada Ring.', '', 'Switch Layer 3 bukan mekanisme akses media pada Ring.', 'Perubahan kecepatan tidak mengatur giliran pengiriman antar-node.']
       },
       {
         prompt: 'Jaringan sekolah perlu membagi laboratorium ke beberapa cabang di bawah kendali node utama. Topologi yang paling tepat adalah...',
         options: ['Topologi Bus', 'Topologi Ring', 'Topologi Tree', 'Topologi Mesh'],
         answer: 2,
-        explanation: 'Topologi Tree mendukung struktur hierarkis dan segmentasi cabang atau departemen.'
+        explanation: 'Topologi Tree mendukung struktur hierarkis dan segmentasi cabang atau departemen.',
+        wrongReasons: ['Bus memakai satu jalur utama dan tidak membentuk cabang bertingkat.', 'Ring menghubungkan node dalam lingkaran, bukan hierarki cabang.', '', 'Mesh menghubungkan banyak node secara langsung dan tidak mengikuti struktur bercabang di bawah node utama.']
       }
     ], next: 'cisco.html'
   },
@@ -123,31 +128,36 @@ const lessons = {
         prompt: 'Berdasarkan layer OSI, router bekerja di layer berapa dan bagaimana forwarding-nya dibandingkan switch?',
         options: ['Router bekerja di Layer 3 berdasarkan alamat IP; switch bekerja di Layer 2 berdasarkan MAC address', 'Router bekerja di Layer 2 berdasarkan MAC address; switch bekerja di Layer 3 berdasarkan IP address', 'Router dan switch sama-sama bekerja di Layer 3 berdasarkan IP address', 'Router bekerja di Layer 1 dan switch bekerja di Layer 4'],
         answer: 0,
-        explanation: 'Router bekerja pada Layer 3 menggunakan IP address, sedangkan switch bekerja pada Layer 2 menggunakan MAC address.'
+        explanation: 'Router bekerja pada Layer 3 menggunakan IP address, sedangkan switch bekerja pada Layer 2 menggunakan MAC address.',
+        wrongReasons: ['', 'Pilihan ini menukar peran router dan switch.', 'Switch biasa meneruskan frame berdasarkan MAC address pada Layer 2, bukan selalu IP pada Layer 3.', 'Router dan switch tidak bekerja pada pasangan Layer 1 dan Layer 4 tersebut.']
       },
       {
         prompt: 'Konfigurasi mana yang benar untuk hostname Router-Cabang, IP 172.16.1.1/24 pada GigabitEthernet0/0, dan enable secret latihan123?',
         options: ['hostname Router-Cabang\ninterface GigabitEthernet0/0\nip address 172.16.1.1 255.255.255.0\nno shutdown\nenable secret latihan123', 'name Router-Cabang\ninterface Gi0/0\nip addr 172.16.1.1/24\nsecret enable latihan123', 'hostname Router-Cabang\nip address GigabitEthernet0/0 172.16.1.1 255.255.255.0\nenable password latihan123', 'hostname Router-Cabang\ninterface GigabitEthernet0/0\nip address 172.16.1.1/24\nshutdown\nenable secret latihan123'],
         answer: 0,
-        explanation: 'Cisco IOS memerlukan konfigurasi pada interface, subnet mask, no shutdown, dan enable secret dari global configuration.'
+        explanation: 'Cisco IOS memerlukan konfigurasi pada interface, subnet mask, no shutdown, dan enable secret dari global configuration.',
+        wrongReasons: ['', 'Perintah name, ip addr, dan secret enable bukan sintaks konfigurasi Cisco IOS yang digunakan pada materi.', 'Alamat IP harus diberikan di dalam mode konfigurasi interface; enable password juga berbeda dari enable secret.', 'Perintah ip address menggunakan subnet mask terpisah dan interface harus diaktifkan dengan no shutdown, bukan shutdown.']
       },
       {
         prompt: 'Konfigurasi mana yang benar untuk VLAN 10 Guru, VLAN 20 Siswa, Fa0/2 di VLAN 10, dan Fa0/3 di VLAN 20?',
         options: ['vlan 10\nname Guru\nvlan 20\nname Siswa\ninterface FastEthernet0/2\nswitchport mode access\nswitchport access vlan 10\ninterface FastEthernet0/3\nswitchport mode access\nswitchport access vlan 20', 'vlan Guru 10\nvlan Siswa 20\ninterface FastEthernet0/2\nvlan access 10\ninterface FastEthernet0/3\nvlan access 20', 'interface FastEthernet0/2\nswitchport access vlan 10\ninterface FastEthernet0/3\nswitchport access vlan 20\n(tanpa membuat VLAN terlebih dahulu)', 'vlan 10 name Guru vlan 20 name Siswa\nswitchport trunk vlan 10,20 pada FastEthernet0/2 dan 0/3'],
         answer: 0,
-        explanation: 'VLAN harus dibuat terlebih dahulu, lalu setiap port diatur sebagai access port dan ditempatkan pada VLAN yang sesuai.'
+        explanation: 'VLAN harus dibuat terlebih dahulu, lalu setiap port diatur sebagai access port dan ditempatkan pada VLAN yang sesuai.',
+        wrongReasons: ['', 'Sintaks vlan Guru 10 dan vlan access 10 tidak sesuai dengan perintah VLAN Cisco IOS.', 'Pilihan ini tidak membuat VLAN 10 dan 20 terlebih dahulu sesuai kebutuhan soal.', 'Fa0/2 dan Fa0/3 diminta sebagai access port pada VLAN berbeda, bukan trunk port.']
       },
       {
         prompt: 'Perintah static route mana yang benar untuk menghubungkan 192.168.10.0/24 dan 192.168.20.0/24 melalui link 172.16.0.0/30?',
         options: ['ip route 192.168.10.0 255.255.255.0 172.16.0.2\nip route 192.168.20.0 255.255.255.0 172.16.0.1', 'route static 192.168.10.0/24 via 172.16.0.2\nroute static 192.168.20.0/24 via 172.16.0.1', 'ip route 172.16.0.2 255.255.255.0 192.168.10.0\nip route 172.16.0.1 255.255.255.0 192.168.20.0', 'ip static-route 192.168.10.0 192.168.20.0 172.16.0.0/30'],
         answer: 0,
-        explanation: 'Format static route Cisco IOS adalah ip route, diikuti network tujuan, subnet mask, dan next-hop.'
+        explanation: 'Format static route Cisco IOS adalah ip route, diikuti network tujuan, subnet mask, dan next-hop.',
+        wrongReasons: ['', 'route static ... via bukan sintaks static route Cisco IOS.', 'Pilihan ini menempatkan alamat next-hop sebagai network tujuan sehingga urutan parameternya salah.', 'ip static-route bukan perintah yang digunakan untuk membuat static route Cisco IOS.']
       },
       {
         prompt: 'Kapan static routing sebaiknya digunakan dibandingkan dynamic routing?',
         options: ['Static routing untuk jaringan kecil dan stabil; dynamic routing untuk jaringan besar dan sering berubah', 'Static routing selalu menyesuaikan perubahan topologi secara otomatis', 'Dynamic routing hanya digunakan pada jaringan dengan satu router', 'Keduanya selalu memiliki performa identik pada semua jaringan'],
         answer: 0,
-        explanation: 'Static routing mudah dikontrol pada jaringan kecil, sedangkan dynamic routing lebih efisien untuk jaringan besar dan berubah-ubah.'
+        explanation: 'Static routing mudah dikontrol pada jaringan kecil, sedangkan dynamic routing lebih efisien untuk jaringan besar dan berubah-ubah.',
+        wrongReasons: ['', 'Static route dikonfigurasi manual dan tidak otomatis mengikuti perubahan topologi.', 'Dynamic routing justru berguna ketika beberapa router perlu bertukar informasi rute.', 'Kebutuhan pengelolaan dan kemampuan beradaptasi kedua metode berbeda menurut kondisi jaringan.']
       }
     ], next: 'mikrotik.html'
   },
@@ -199,12 +209,16 @@ const lessons = {
           'Buka New Terminal, ketik MAC address, lalu tekan Enter',
           'Buka System > Identity, masukkan MAC address, lalu klik Connect'
         ],
-        answer: 0
+        answer: 0,
+        explanation: 'Winbox menemukan perangkat melalui tab Neighbors. Pilih MAC address, masukkan data login, lalu klik Connect.',
+        wrongReasons: ['', 'IP > Routes digunakan untuk mengatur rute, bukan masuk melalui MAC address.', 'New Terminal dipakai setelah terhubung ke RouterOS, bukan untuk memilih perangkat.', 'System > Identity digunakan untuk mengubah nama perangkat, bukan untuk memulai koneksi.']
       },
       {
         prompt: 'Menu Winbox yang digunakan untuk mengubah nama identitas perangkat adalah...',
         options: ['Interfaces > Ethernet', 'IP > Addresses', 'System > Identity', 'Tools > Profile'],
-        answer: 2
+        answer: 2,
+        explanation: 'Nama identitas perangkat diubah melalui menu System > Identity.',
+        wrongReasons: ['Interfaces > Ethernet mengatur antarmuka jaringan, bukan nama identitas router.', 'IP > Addresses digunakan untuk memasang alamat IP.', '', 'Tools > Profile digunakan untuk melihat penggunaan sumber daya, bukan mengganti identitas.']
       },
       {
         prompt: 'Langkah yang tepat untuk memasang IP 192.168.100.1/24 pada ether2 melalui Winbox adalah...',
@@ -214,12 +228,16 @@ const lessons = {
           'Interfaces > ether2 > ubah MAC address menjadi 192.168.100.1/24',
           'System > Users > tambah pengguna 192.168.100.1/24 pada ether2'
         ],
-        answer: 0
+        answer: 0,
+        explanation: 'Alamat 192.168.100.1/24 dipasang pada ether2 melalui IP > Addresses dengan menambah alamat dan memilih interface.',
+        wrongReasons: ['', 'IP > DNS mengatur server DNS, bukan alamat IP interface.', 'Alamat IP tidak dimasukkan sebagai MAC address pada menu Interfaces.', 'System > Users digunakan untuk akun pengguna, bukan alamat IP interface.']
       },
       {
         prompt: 'Fitur Winbox yang memandu konfigurasi DHCP Server secara bertahap adalah...',
         options: ['Quick Set pada menu System', 'DHCP Setup pada IP > DHCP Server', 'Packet Sniffer pada menu Tools', 'Neighbor Discovery pada menu IP'],
-        answer: 1
+        answer: 1,
+        explanation: 'DHCP Setup pada menu IP > DHCP Server memandu konfigurasi DHCP Server secara bertahap.',
+        wrongReasons: ['Quick Set bukan fitur DHCP Setup yang ditanyakan.', '', 'Packet Sniffer digunakan untuk memeriksa lalu lintas paket, bukan memandu DHCP Server.', 'Neighbor Discovery digunakan untuk menemukan perangkat, bukan menyiapkan DHCP Server.']
       },
       {
         prompt: 'Konfigurasi apa yang diperlukan agar client dapat menuju internet melalui MikroTik?',
@@ -229,7 +247,9 @@ const lessons = {
           'DHCP Client pada ether2 tanpa default route dan NAT',
           'Mengganti Identity router dan mengaktifkan Neighbor Discovery'
         ],
-        answer: 0
+        answer: 0,
+        explanation: 'Default route mengarahkan trafik ke gateway ISP, sedangkan NAT srcnat dengan action masquerade memungkinkan client berbagi koneksi internet.',
+        wrongReasons: ['', 'Bridge tanpa alamat IP dan tanpa route tidak menyediakan jalur ke internet.', 'DHCP Client saja tidak menggantikan kebutuhan default route dan NAT untuk client.', 'Mengganti Identity dan mengaktifkan Neighbor Discovery tidak mengatur jalur internet client.']
       },
       {
         prompt: 'Rangkaian perintah CLI RouterOS mana yang benar untuk IP ether2, default route, dan NAT masquerade?',
@@ -239,7 +259,9 @@ const lessons = {
           '/ip dns add address=192.168.100.1/24 interface=ether2\n/ip route print gateway=192.168.1.1\n/ip firewall filter add action=masquerade',
           '/system identity set name=192.168.100.1/24\n/ip route remove 0.0.0.0/0\n/ip firewall nat disable'
         ],
-        answer: 0
+        answer: 0,
+        explanation: 'RouterOS memakai /ip address add untuk IP ether2, /ip route add untuk default route, dan /ip firewall nat add dengan action=masquerade untuk NAT.',
+        wrongReasons: ['', 'Perintah /interface add, /ip gateway set, dan /firewall enable nat bukan rangkaian sintaks RouterOS yang sesuai.', 'DNS tidak memasang alamat IP ether2; ip route print hanya menampilkan rute dan masquerade bukan action pada firewall filter.', 'System Identity tidak memasang IP, menghapus default route memutus jalur keluar, dan NAT justru dinonaktifkan.']
       }
     ], next: 'quiz.html'
   }
@@ -328,21 +350,19 @@ function usesArticleLayout(lesson, id) {
 
 function renderContent(lesson, id, progress) {
   if (lesson.type === 'practice') {
-    const compactCiscoIntro = id === 'cisco-latihan';
-    const practiceIntro = `<div class="lesson-reading-intro">${compactCiscoIntro ? '' : `<span>Latihan Materi ${lesson.number.charAt(0)}</span>`}<h2>${lesson.title}</h2>${compactCiscoIntro ? '' : `<p>${lesson.lead}</p>`}</div>`;
     if (lesson.questions) {
       const questions = lesson.questions.map((question, questionIndex) => {
         const options = question.options.map((option, optionIndex) => `<button type="button" data-multi-option="${optionIndex}" data-question-index="${questionIndex}"><strong>${String.fromCharCode(65 + optionIndex)}.</strong><span>${option}</span></button>`).join('');
         return `<section class="practice-question-block"><span class="question-tag">Soal ${questionIndex + 1} dari ${lesson.questions.length}</span><h3>${question.prompt}</h3><div class="exercise-options">${options}</div><p class="question-feedback" data-question-feedback="${questionIndex}" aria-live="polite"></p></section>`;
       }).join('');
-      return `<section class="lesson-reading-card lesson-practice">${practiceIntro}<div class="practice-content"><div class="practice-question-list">${questions}</div><p class="practice-feedback" data-practice-feedback aria-live="polite">Jawab semua soal dengan benar untuk menyelesaikan latihan.</p></div></section>`;
+      return `<section class="lesson-reading-card lesson-practice"><div class="practice-content"><div class="practice-question-list">${questions}</div><p class="practice-feedback" data-practice-feedback aria-live="polite">Jawab semua soal. Nilai minimal untuk menyelesaikan latihan adalah 75%.</p></div></section>`;
     }
     if (lesson.tasks) {
       const tasks = lesson.tasks.map((task, index) => `<label class="practice-task"><span>${index + 1}. ${task}</span><textarea rows="4" data-practice-task="${index}" placeholder="Tulis jawabanmu di sini..."></textarea></label>`).join('');
-      return `<section class="lesson-reading-card lesson-practice">${practiceIntro}<div class="practice-content"><div class="practice-task-list">${tasks}</div><p class="practice-feedback" data-practice-feedback aria-live="polite">Isi seluruh jawaban untuk menyelesaikan latihan.</p></div></section>`;
+      return `<section class="lesson-reading-card lesson-practice"><div class="practice-content"><div class="practice-task-list">${tasks}</div><p class="practice-feedback" data-practice-feedback aria-live="polite">Isi seluruh jawaban untuk menyelesaikan latihan.</p></div></section>`;
     }
     const options = lesson.options.map((option, index) => `<button type="button" data-practice-option="${index}">${String.fromCharCode(65 + index)}. ${option}</button>`).join('');
-    return `<section class="lesson-reading-card lesson-practice">${practiceIntro}<div class="practice-content"><span class="question-tag">Pertanyaan latihan</span><h3>${lesson.question}</h3><div class="exercise-options">${options}</div><p class="practice-feedback" data-practice-feedback aria-live="polite"></p></div></section>`;
+    return `<section class="lesson-reading-card lesson-practice"><div class="practice-content"><span class="question-tag">Pertanyaan latihan</span><h3>${lesson.question}</h3><div class="exercise-options">${options}</div><p class="practice-feedback" data-practice-feedback aria-live="polite"></p></div></section>`;
   }
   const points = (lesson.points || []).map((point, index) => `<div><strong>0${index + 1}</strong><span>${point}</span></div>`).join('');
   const pointSection = points ? `<div class="reading-points">${points}</div>` : '';
@@ -379,7 +399,7 @@ function initLessonPage() {
   NetrivoSession.write('netrivoVisitedLessons', [...new Set([...(Array.isArray(visited) ? visited : []), id])]);
   NetrivoSession.write('netrivoCurrentLesson', id);
   document.body.classList.toggle('lesson-article', usesArticleLayout(lesson, id));
-  const pageHeader = id === 'cisco-latihan' ? '' : `<header class="module-content-head"><h1>${lesson.title}</h1>${usesArticleLayout(lesson, id) ? '' : `<p>${lesson.lead}</p>`}</header>`;
+  const pageHeader = lesson.type === 'practice' ? '' : `<header class="module-content-head"><h1>${lesson.title}</h1>${usesArticleLayout(lesson, id) ? '' : `<p>${lesson.lead}</p>`}</header>`;
   document.body.innerHTML = `<div class="module-shell">${renderSidebar(id, progress)}<main class="module-main"><div class="module-content">${pageHeader}${renderContent(lesson, id, progress)}<div class="module-next-step"><button type="button" data-complete-lesson ${(lesson.type === 'practice' || lesson.video || lesson.type === 'content') && !progress.has(id) ? 'disabled' : ''}>${progress.has(id) ? 'Selanjutnya' : lesson.type === 'practice' ? 'Jawab dengan benar' : lesson.video ? 'Tonton video sampai selesai' : 'Baca sampai selesai'}</button></div></div></main></div>`;
 
   const completeButton = document.querySelector('[data-complete-lesson]');
@@ -474,11 +494,22 @@ function initLessonPage() {
       const updatePractice = () => {
         multiOptions.forEach((option) => {
           const selected = selectedAnswers[Number(option.dataset.questionIndex)];
+          const isSelected = selected === Number(option.dataset.multiOption);
+          const isCorrect = selected === lesson.questions[Number(option.dataset.questionIndex)].answer;
           option.disabled = progress.has(id) || selected !== null;
-          option.classList.toggle('selected-choice', selected === Number(option.dataset.multiOption));
+          option.classList.toggle('selected-choice', isSelected);
+          option.classList.toggle('selected-correct', isSelected && isCorrect);
+          option.classList.toggle('selected-wrong', isSelected && !isCorrect);
         });
         document.querySelectorAll('[data-question-feedback]').forEach((item, index) => {
-          item.textContent = selectedAnswers[index] === null ? '' : 'Jawaban sudah dipilih.';
+          const selected = selectedAnswers[index];
+          const question = lesson.questions[index];
+          const correct = selected === question.answer;
+          item.classList.toggle('is-correct', selected !== null && correct);
+          item.classList.toggle('is-wrong', selected !== null && !correct);
+          item.textContent = selected === null ? '' : correct
+            ? `Benar. ${question.explanation}`
+            : `Pilihan ${String.fromCharCode(65 + selected)} belum tepat. ${question.wrongReasons[selected]} Jawaban yang benar adalah pilihan ${String.fromCharCode(65 + question.answer)}. ${question.explanation}`;
         });
         const answeredCount = selectedAnswers.filter((answer) => answer !== null).length;
         const correctCount = selectedAnswers.filter((answer, index) => answer === lesson.questions[index].answer).length;

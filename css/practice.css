@@ -1,0 +1,16 @@
+/* Keep the lesson sidebar and let practice questions flow like lesson articles. */
+body.netrivo-lesson[data-lesson$="-latihan"] .lesson-practice {
+  overflow: visible;
+  border: 0;
+  border-radius: 0;
+  background: transparent;
+  box-shadow: none;
+}
+body.netrivo-lesson[data-lesson$="-latihan"] .practice-content { padding: 0; }
+body.netrivo-lesson[data-lesson$="-latihan"] .practice-question-list { display: block; }
+body.netrivo-lesson[data-lesson$="-latihan"] .practice-question-block { padding: 0 0 34px; margin-bottom: 34px; border-bottom-color: #dce7ee; }
+body.netrivo-lesson[data-lesson$="-latihan"] .practice-question-block:last-child { margin-bottom: 0; }
+
+@media (max-width: 700px) {
+  body.netrivo-lesson[data-lesson$="-latihan"] .practice-question-block { padding-bottom: 26px; margin-bottom: 26px; }
+}

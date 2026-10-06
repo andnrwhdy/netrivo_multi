@@ -1,0 +1,210 @@
+/* Dashboard styling follows the soft blue and teal palette used by the lesson pages. */
+.netrivo-home.wayground-inspired {
+  color: #102a43;
+  background: linear-gradient(rgba(248,252,253,.94), rgba(248,252,253,.94)), url("../assets/images/bg/bg3.png") center top / cover fixed;
+}
+.wayground-inspired .netrivo-header,
+.wayground-inspired .netrivo-header.is-outside-hero {
+  position: sticky;
+  top: 0;
+  z-index: 20;
+  min-height: 68px;
+  padding: 8px 32px;
+  border: 0;
+  border-bottom: 1px solid #e2edf2;
+  border-radius: 0 0 24px 24px;
+  background: rgba(255,255,255,.97);
+  box-shadow: 0 4px 18px rgba(16,42,67,.035);
+  backdrop-filter: none;
+}
+.wayground-inspired .netrivo-logo { width: 150px; height: 48px; }
+.wayground-inspired .netrivo-logo img { width: 160px; height: 160px; }
+.wayground-inspired .header-actions-modern { gap: 8px; }
+.wayground-inspired .hero-copy,.wayground-inspired .hero-showcase,.wayground-inspired .showcase-window { min-width: 0; }
+.wayground-inspired .dashboard-nav-link,
+.wayground-inspired .netrivo-nav-button {
+  min-height: 40px;
+  padding: 10px 15px;
+  border: 1px solid transparent;
+  border-radius: 12px;
+  color: #315269;
+  background: transparent;
+  box-shadow: none;
+  font-size: 13px;
+  font-weight: 600;
+  line-height: 1.3;
+  transition: color .2s, background .2s, transform .2s;
+}
+.wayground-inspired .dashboard-nav-link:hover,
+.wayground-inspired .netrivo-nav-button:hover,
+.wayground-inspired .evaluation-nav-button:hover { color: #116f88; background: #eaf7fa; border-color: transparent; transform: none; }
+.wayground-inspired .evaluation-nav-button { color: #315269; }
+.wayground-inspired .netrivo-nav-button:last-child { color: #fff; background: #147f99; }
+.wayground-inspired .netrivo-nav-button:last-child:hover { color: #fff; background: #106b83; }
+
+.wayground-inspired .netrivo-hero {
+  width: min(1160px, calc(100% - 48px));
+  max-width: none;
+  min-height: 420px;
+  margin: 34px auto 0;
+  padding: 48px clamp(24px, 4vw, 56px);
+  display: grid;
+  grid-template-columns: minmax(0,1fr) minmax(0,.92fr);
+  align-items: center;
+  gap: clamp(28px, 5vw, 70px);
+  overflow: visible;
+  text-align: left;
+  border: 1px solid #dcebf0;
+  border-radius: 24px;
+  background: radial-gradient(circle at 88% 18%, #e5f8f4, transparent 40%), linear-gradient(115deg, #fff, #f0f9fb);
+  box-shadow: 0 16px 48px rgba(16,42,67,.055);
+}
+.wayground-inspired .hero-copy { width: 100%; max-width: 560px; margin: 0; }
+.dashboard-eyebrow,.dashboard-section-kicker,.dashboard-game-label { color: #147f99; font-size: 12px; font-weight: 700; letter-spacing: .07em; text-transform: uppercase; }
+.wayground-inspired .hero-copy h1 {
+  margin: 14px 0 18px;
+  color: #102a43;
+  font-family: var(--font-sans);
+  font-size: clamp(46px, 5.5vw, 68px);
+  font-weight: 700;
+  line-height: 1.05;
+  letter-spacing: -.035em;
+  text-shadow: none;
+  transform: none;
+}
+.wayground-inspired .hero-copy p { max-width: 490px; margin: 0; color: #527084; font-size: 17px; line-height: 1.7; }
+.dashboard-hero-actions { display: flex; flex-wrap: wrap; gap: 12px; margin-top: 28px; }
+.dashboard-button,.dashboard-game-link { min-height: 46px; padding: 11px 20px; display: inline-flex; align-items: center; justify-content: center; gap: 15px; border-radius: 12px; font-size: 14px; font-weight: 650; transition: transform .2s, background .2s, box-shadow .2s; }
+.dashboard-button:hover,.dashboard-game-link:hover { transform: translateY(-2px); }
+.dashboard-button-primary { color: #fff; background: #147f99; box-shadow: 0 8px 20px rgba(20,127,153,.16); }
+.dashboard-button-primary:hover { background: #106b83; }
+.dashboard-button-secondary { color: #176e87; border: 1px solid #c6e1e9; background: #fff; }
+.dashboard-button-secondary:hover { background: #ecf8fa; }
+.wayground-inspired .hero-showcase { max-width: none; width: 100%; margin: 0; padding: 0; }
+.wayground-inspired .showcase-window { aspect-ratio: 4 / 3; min-height: 0; border: 7px solid #fff; border-radius: 20px; box-shadow: 0 18px 40px rgba(16,42,67,.13); }
+/* The second file contains letterboxing; crop its built-in bars inside the hero frame. */
+.wayground-inspired .showcase-video:nth-child(2) { transform: scale(1.34); }
+
+.dashboard-trust { max-width: 1160px; margin: 0 auto; padding: 20px 24px 0; text-align: center; }
+.dashboard-trust .trust-badges { margin: 0 auto 8px; gap: 8px; }
+.dashboard-trust .trust-badges span { min-height: 62px; border-color: #e7eff2; border-radius: 12px; background: #fff; }
+.dashboard-trust .trust-badges img { height: 45px; }
+.dashboard-trust .trust-copy { font-size: 12px; color: #79909e; }
+
+.dashboard-progress { max-width: 1160px; margin: 0 auto; padding: 52px 24px 12px; display: grid; grid-template-columns: .8fr 1.2fr; align-items: center; gap: 42px; }
+.dashboard-progress h2,.dashboard-section-heading h2 { margin: 6px 0 8px; color: #102a43; font-size: clamp(27px,3vw,36px); line-height: 1.2; }
+.dashboard-progress-heading p,.dashboard-section-heading p { max-width: 430px; margin: 0; color: #60798a; font-size: 14px; line-height: 1.65; }
+.dashboard-progress-card { padding: 25px 28px; border: 1px solid #d7e9ee; border-radius: 20px; background: #fff; box-shadow: 0 12px 32px rgba(16,42,67,.045); }
+.dashboard-progress-top,.dashboard-progress-bottom { display: flex; justify-content: space-between; gap: 16px; align-items: center; }
+.dashboard-progress-top span { color: #315269; font-weight: 650; }
+.dashboard-progress-top strong { color: #147f99; font-size: 27px; line-height: 1; }
+.dashboard-progress-track { height: 7px; margin: 18px 0 12px; overflow: hidden; border-radius: 20px; background: #e4f2f6; }
+.dashboard-progress-track span { width: 0; height: 100%; display: block; border-radius: inherit; background: linear-gradient(90deg,#147f99,#20b486); transition: width .8s ease; }
+.dashboard-progress-bottom { color: #698394; font-size: 12px; }
+
+.wayground-inspired .activity-section.course-column { width: min(1160px,100%); max-width: none; padding: 64px 24px 52px; }
+.dashboard-section-heading { margin-bottom: 24px; display: flex; align-items: end; justify-content: space-between; gap: 24px; }
+.wayground-inspired .course-overview-panel { margin-top: 0; padding: 0; gap: 18px; border: 0; border-radius: 0; background: transparent; box-shadow: none; }
+.course-panel-mascot { display: none; }
+.wayground-inspired .course-material-card { min-height: 300px; border: 1px solid #dce9ee; border-radius: 20px; box-shadow: 0 10px 26px rgba(16,42,67,.04); transition: transform .2s,border-color .2s,box-shadow .2s; }
+.wayground-inspired .course-material-card:hover { transform: translateY(-3px); border-color: #b8dce6; box-shadow: 0 16px 34px rgba(16,42,67,.09); }
+.wayground-inspired .course-card-cover { min-height: 135px; background-position: center; }
+.wayground-inspired .course-card-content { padding: 19px 22px 14px; }
+.wayground-inspired .course-card-content > strong { color: #102a43; font-size: 21px; font-weight: 650; }
+.wayground-inspired .course-card-content > span { color: #60798a; font-size: 13px; line-height: 1.6; }
+.wayground-inspired .course-card-action { min-height: 42px; margin: 0 18px 18px; padding: 10px 14px; border-radius: 10px; background: #147f99; font-size: 13px; }
+.wayground-inspired .course-cisco .course-card-action { background: #246da4; }
+.wayground-inspired .course-mikrotik .course-card-action { background: #17876c; }
+
+.wayground-inspired .course-evaluation-action { margin-top: 12px; padding: 25px 28px; display: flex; justify-content: initial; align-items: center; gap: 20px; border: 1px solid #cfe4e9; border-radius: 20px; background: linear-gradient(110deg,#fff,#edf9f7); box-shadow: 0 12px 30px rgba(16,42,67,.05); }
+.dashboard-evaluation-icon { width: 58px; height: 58px; flex: 0 0 58px; display: grid; place-items: center; border-radius: 16px; color: #147f99; background: #dff3f6; font-size: 30px; font-weight: 700; }
+.dashboard-evaluation-copy { min-width: 0; flex: 1; }
+.dashboard-evaluation-copy h3 { margin: 3px 0 2px; color: #102a43; font-size: 22px; }
+.dashboard-evaluation-copy p { margin: 0; color: #60798a; font-size: 13px; }
+.dashboard-evaluation-status { display: inline-block; margin-top: 5px; color: #158268; font-size: 12px; font-weight: 650; }
+.wayground-inspired .course-evaluation-button { min-height: 46px; padding: 11px 18px; gap: 16px; flex: 0 0 auto; border: 0; border-radius: 11px; color: #fff; background: #147f99; font-size: 13px; box-shadow: 0 8px 20px rgba(20,127,153,.13); transition: transform .2s,background .2s; }
+.wayground-inspired .course-evaluation-button:hover { transform: translateY(-2px); background: #106b83; }
+.wayground-inspired .evaluation-confirmation-panel { border: 0; }
+
+.wayground-inspired .platform-band {
+  margin-top: 12px;
+  padding: 64px 0 80px;
+  border: 0;
+  border-radius: 28px 28px 0 0;
+  color: #eaf5f8;
+  background-color: #102a43;
+  background-image:
+    radial-gradient(ellipse at 50% 20%, rgba(42, 167, 192, .16), transparent 48%),
+    linear-gradient(rgba(111, 199, 217, .09) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(111, 199, 217, .09) 1px, transparent 1px),
+    linear-gradient(rgba(111, 199, 217, .045) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(111, 199, 217, .045) 1px, transparent 1px);
+  background-size: 100% 100%, 48px 48px, 48px 48px, 192px 192px, 192px 192px;
+  box-shadow: none;
+}
+.wayground-inspired .platform-band::before {
+  display: block;
+  background: linear-gradient(180deg, transparent, rgba(90, 205, 226, .14), transparent);
+}
+.wayground-inspired .solutions-section { max-width: 1160px; }
+.wayground-inspired .solutions-heading { max-width: none; margin: 0 0 26px; text-align: left; }
+.wayground-inspired .solutions-heading > span { color: #6edfc4; font-weight: 700; }
+.wayground-inspired .solutions-heading h2 { margin: 6px 0 8px; color: #f7fbfc; font-size: clamp(27px,3vw,36px); }
+.wayground-inspired .solutions-heading p { margin: 0; color: #bfd5de; font-size: 14px; }
+.wayground-inspired .solution-row { min-width: 0; padding: 24px; margin-bottom: 20px; grid-template-columns: minmax(0,.58fr) minmax(0,1fr); gap: 28px; align-items: start; border: 1px solid #dce9ee; border-radius: 22px; background: #fff; box-shadow: 0 12px 30px rgba(16,42,67,.045); transition: transform .2s,box-shadow .2s; }
+.wayground-inspired .solution-row:hover { transform: translateY(-3px); box-shadow: 0 16px 36px rgba(16,42,67,.09); }
+.wayground-inspired .solution-copy { padding: 12px 0; }
+.wayground-inspired .solution-copy h3 { margin: 8px 0 12px; color: #102a43; font-size: clamp(24px,2.7vw,32px); }
+.wayground-inspired .solution-copy p { max-width: 350px; color: #60798a; font-size: 14px; }
+.dashboard-game-link { margin-top: 8px; color: #147f99; border: 1px solid #c7e3e9; background: #eff8fa; }
+.dashboard-game-link:hover { background: #def2f6; }
+.wayground-inspired .solution-game { border: 1px solid #dce9ee; border-radius: 16px; background: #e9f5f8; box-shadow: none; }
+.wayground-inspired .solution-game iframe { height: 520px; }
+.wayground-inspired .site-footer { border-top: 1px solid #e3edf1; background: #f8fcfd; }
+
+@media (max-width: 900px) {
+  .wayground-inspired .netrivo-hero { min-height: 0; gap: 26px; padding: 36px; }
+  .dashboard-progress { gap: 24px; }
+  .wayground-inspired .course-overview-panel { grid-template-columns: repeat(2,minmax(0,1fr)); }
+  .wayground-inspired .solution-row { grid-template-columns: 1fr; }
+  .wayground-inspired .solution-game iframe { height: 560px; }
+}
+@media (max-width: 680px) {
+  .wayground-inspired .netrivo-header,.wayground-inspired .netrivo-header.is-outside-hero { display: flex; flex-wrap: wrap; gap: 4px; padding: 8px 16px; }
+  .wayground-inspired .netrivo-logo { width: 122px; height: 38px; }
+  .wayground-inspired .netrivo-logo img { width: 132px; height: 132px; }
+  .wayground-inspired .header-actions-modern { width: auto; min-width: 0; margin-left: auto; gap: 4px; }
+  .wayground-inspired .dashboard-nav-link { display: inline-flex; }
+  .wayground-inspired .netrivo-nav-button { min-height: 36px; padding: 8px 10px; font-size: 11px; }
+  .wayground-inspired .netrivo-hero { width: calc(100% - 32px); margin-top: 18px; padding: 30px 22px; grid-template-columns: minmax(0,1fr); gap: 28px; }
+  .wayground-inspired .hero-copy h1 { font-size: 48px; }
+  .wayground-inspired .hero-copy p { font-size: 15px; }
+  .wayground-inspired .showcase-window { aspect-ratio: 16/9; }
+  .wayground-inspired .showcase-video:nth-child(2) { transform: none; }
+  .dashboard-trust { padding: 18px 16px 0; }
+  .dashboard-trust .trust-badges { grid-template-columns: repeat(4,minmax(0,1fr)); }
+  .dashboard-trust .trust-badges span { min-height: 50px; padding: 5px; }
+  .dashboard-trust .trust-badges img { height: 34px; }
+  .dashboard-progress { padding: 42px 16px 0; grid-template-columns: 1fr; gap: 18px; }
+  .dashboard-progress-card { padding: 22px; }
+  .wayground-inspired .activity-section.course-column { padding: 48px 16px; }
+  .dashboard-section-heading { display: block; }
+  .wayground-inspired .course-overview-panel { grid-template-columns: 1fr; }
+  .wayground-inspired .course-material-card { min-height: 0; }
+  .wayground-inspired .course-evaluation-action { padding: 22px; flex-wrap: wrap; }
+  .wayground-inspired .course-evaluation-button { width: 100%; justify-content: space-between; }
+  .wayground-inspired .platform-band { padding: 48px 0; }
+  .wayground-inspired .solutions-section { padding: 0 16px; }
+  .wayground-inspired .solution-row { padding: 18px; gap: 18px; }
+  .wayground-inspired .solution-game iframe { height: 480px; }
+}
+@media (max-width: 380px) {
+  .wayground-inspired .netrivo-logo { width: 95px; }
+  .wayground-inspired .netrivo-logo img { width: 105px; height: 105px; }
+  .wayground-inspired .netrivo-nav-button { padding: 7px 8px; font-size: 10px; }
+  .dashboard-button { width: 100%; }
+  .dashboard-progress-bottom { flex-direction: column; align-items: flex-start; gap: 3px; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .dashboard-progress-track span,.dashboard-button,.dashboard-game-link,.wayground-inspired .solution-row,.wayground-inspired .course-material-card { transition: none; }
+}
