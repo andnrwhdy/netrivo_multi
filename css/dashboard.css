@@ -91,6 +91,17 @@
 .dashboard-trust .trust-badges img { height: 45px; }
 .dashboard-trust .trust-copy { font-size: 12px; color: #79909e; }
 
+.dashboard-about { max-width: 1160px; margin: 0 auto; padding: 58px 24px 4px; }
+.dashboard-about-heading { max-width: 680px; }
+.dashboard-about h2 { margin: 6px 0 10px; color: #102a43; font-size: clamp(27px,3vw,36px); line-height: 1.2; }
+.dashboard-about-heading p { margin: 0; color: #60798a; font-size: 14px; line-height: 1.7; }
+.dashboard-outcomes { margin-top: 26px; display: grid; grid-template-columns: repeat(4, minmax(0,1fr)); gap: 14px; }
+.dashboard-outcome-card { min-height: 196px; padding: 22px; border: 1px solid #dce9ee; border-radius: 18px; background: #fff; box-shadow: 0 10px 26px rgba(16,42,67,.04); transition: transform .2s ease, box-shadow .2s ease; }
+.dashboard-outcome-card:hover { transform: translateY(-3px); box-shadow: 0 16px 34px rgba(16,42,67,.08); }
+.dashboard-outcome-number { display: inline-grid; min-width: 34px; height: 28px; place-items: center; border-radius: 8px; color: #147f99; background: #e8f6f8; font-size: 12px; font-weight: 700; }
+.dashboard-outcome-card h3 { margin: 16px 0 7px; color: #173b56; font-size: 17px; line-height: 1.35; }
+.dashboard-outcome-card p { margin: 0; color: #60798a; font-size: 13px; line-height: 1.6; }
+
 .dashboard-progress { max-width: 1160px; margin: 0 auto; padding: 52px 24px 12px; display: grid; grid-template-columns: .8fr 1.2fr; align-items: center; gap: 42px; }
 .dashboard-progress h2,.dashboard-section-heading h2 { margin: 6px 0 8px; color: #102a43; font-size: clamp(27px,3vw,36px); line-height: 1.2; }
 .dashboard-progress-heading p,.dashboard-section-heading p { max-width: 430px; margin: 0; color: #60798a; font-size: 14px; line-height: 1.65; }
@@ -165,6 +176,7 @@
 @media (max-width: 900px) {
   .wayground-inspired .netrivo-hero { min-height: 0; gap: 26px; padding: 36px; }
   .dashboard-progress { gap: 24px; }
+  .dashboard-outcomes { grid-template-columns: repeat(2, minmax(0,1fr)); }
   .wayground-inspired .course-overview-panel { grid-template-columns: repeat(2,minmax(0,1fr)); }
   .wayground-inspired .solution-row { grid-template-columns: 1fr; }
   .wayground-inspired .solution-game iframe { height: 560px; }
@@ -185,6 +197,9 @@
   .dashboard-trust .trust-badges { grid-template-columns: repeat(4,minmax(0,1fr)); }
   .dashboard-trust .trust-badges span { min-height: 50px; padding: 5px; }
   .dashboard-trust .trust-badges img { height: 34px; }
+  .dashboard-about { padding: 42px 16px 0; }
+  .dashboard-outcomes { grid-template-columns: 1fr; gap: 12px; }
+  .dashboard-outcome-card { min-height: 0; }
   .dashboard-progress { padding: 42px 16px 0; grid-template-columns: 1fr; gap: 18px; }
   .dashboard-progress-card { padding: 22px; }
   .wayground-inspired .activity-section.course-column { padding: 48px 16px; }

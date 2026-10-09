@@ -55,7 +55,9 @@ async function main() {
     await page.send('Page.enable');
     await page.send('Page.navigate', { url: pathToFileURL(path.resolve('index.html')).href });
     for (let i = 0; i < 50 && !(await evaluate('document.readyState === "complete"')); i++) await new Promise((r) => setTimeout(r, 100));
-    assert.deepEqual(await evaluate(`Array.from(document.querySelectorAll('.header-actions-modern a'), (link) => link.textContent.trim())`), ['Game', 'Evaluasi', 'Mulai Belajar']);
+    assert.deepEqual(await evaluate(`Array.from(document.querySelectorAll('.header-actions-modern a'), (link) => link.textContent.trim())`), ['Game', 'About', 'Evaluasi', 'Mulai Belajar']);
+    assert.equal(await evaluate(`document.querySelector('#about').getAttribute('aria-labelledby')`), 'about-title');
+    assert.equal(await evaluate(`document.querySelectorAll('.dashboard-outcome-card').length`), 4);
     assert.equal(await evaluate(`getComputedStyle(document.querySelector('.platform-band'), '::before').animationName`), 'platform-grid-scan');
     for (const width of [1440, 768, 390, 320]) {
       await page.send('Emulation.setDeviceMetricsOverride', { width, height: 900, deviceScaleFactor: 1, mobile: width < 768 });
